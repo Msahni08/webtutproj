@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/bootstrap',express.static(path.join(__dirname,"../node_modules/bootstrap/dist/")))
 app.use('/js',express.static(path.join(__dirname,"../node_modules/bootstrap/dist")))
 app.use('/jq',express.static(path.join(__dirname,"../node_modules/jquery/dist")))
+app.use('/font',express.static(path.join(__dirname,"../node_modules/font-awesome")))
 
 app.use('/css',express.static(path.join(__dirname,"public/stylesheet")))
 app.use('/users', usersRouter);

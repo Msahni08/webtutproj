@@ -1,3 +1,9 @@
 .ab{
     background-color: aqua;
 }
+
+.bg{
+    color: red;
+    text-align: center;
+    margin: 2%;
+}

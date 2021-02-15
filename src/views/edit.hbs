@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font/css/font-awesome.css">
+
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1 class="bg">Edit Employee records</h1>
+
+
+<div class="row justify-content-center ">
+    <div class="col-md-6 bg-info rounded shadow py-3 myRecForm">
+        <form action="/update" method="POST">
+            <input type="hidden" name="id" value="{{emprecd._id}}">
+            <div class="mb-3 ">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="Name" placeholder="Enter Your Name" name="name"value="{{emprecd.name}}">
+           </div>
+            <div class="mb-3 ">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="text" class="form-control" id="mobile" placeholder="Enter Your Mobile Number" name="mobile"value="{{emprecd.mobile}}">
+           </div>
+            <div class="mb-3 ">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Enter Your Email" name="email"value="{{emprecd.email}}">
+           </div>
+              <div class="mb-3 ">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" placeholder="Enter Your Address" name="address"value="{{emprecd.address}}">
+           </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age" placeholder="Enter Your Age" name="age"value="{{emprecd.age}}">
+                </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="fml" name="gender" class="custom-control-input" value="female"value="{{emprecd.gender}}">
+                <label class="custom-control-label" for="fml">Female</label>
+           </div>
+           <div class="custom-control custom-radio">
+                <input type="radio" id="mle" name="gender" class="custom-control-input" value="male"value="{{emprecd.gender}}">
+                <label class="custom-control-label" for="mle">Male</label>
+           </div>
+            <div class="mb-3 ">
+                <label for="address" class="form-label">Password</label>
+                <input type="password" class="form-control" id="address" placeholder="Enter Your Address" name="password"value="{{emprecd.password}}">
+           </div>
+           <div class="mb-3 ">
+                <label for="cpassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="address" placeholder="Enter Your Address" name="cpassword"value="{{emprecd.cpassword}}">
+           </div>
+
+           
+            <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+    </div>
+    
+</div>
+
+  
+ <script src="js/js/bootstrap.js" type="text/javascript"></script>
+<script src="js/js/bootstrap.min.js" type="text/javascript"></script> 
+<script src="jq/jquery.min.js" type="text/javascript"></script>
+<script src="jq/jquery.js" type="text/javascript"></script> 
+
+
+</body>
+</html>
