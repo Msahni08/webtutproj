@@ -12,8 +12,13 @@
     <title>Document</title>
 </head>
 
-<div class="container">  
-  
+<div class="container ">  
+  {{#if this.success}}
+  <div class="alert alert-success mt-4">
+  <strong>Success!</strong> {{success}}
+  {{/if}}
+</div>
+
       <h1>Filter Emplyoee Records</h1>
         <div class="col">
           <form action="/search" id="employeeform" class="form-horizontal" method="post" role="form">

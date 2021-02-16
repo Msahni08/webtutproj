@@ -68,14 +68,16 @@ router.post('/search', async (req,res)=>{
         //      res.render('index',{title:'employee recods',emprecd:data})
         //  })
     const empFilter= await empModel.find(fltrParameter).lean();
-    res.render('index', { title: 'this is hbs template engine',emprecd:empFilter });
+    res.render('index', { title: 'this is hbs template engine',emprecd:empFilter,success:'' });
     
 })
 
 router.get('/delete/:_id', async (req,res,next)=>{
     var id= req.params._id;   
         var del= await empModel.findByIdAndDelete(id).lean();
-        res.redirect('/')
+        const empData= await empModel.find().lean();
+                res.render('index', { title: 'this is hbs template engine',emprecd:empData,success:'Records Deleted successfully' });
+    
     })
    
     router.get('/edit/:_id', async (req,res,next)=>{
@@ -97,7 +99,8 @@ router.get('/delete/:_id', async (req,res,next)=>{
                     cpassword:req.body.cpassword,
                     
                 }).lean();
-                res.redirect('/')
+                const empData= await empModel.find().lean();
+                res.render('index', { title: 'this is hbs template engine',emprecd:empData,success:'Records updated successfully' });
     
             })     
            
@@ -112,7 +115,7 @@ router.post('/',async (req,res)=>{
         const createEmp =await emp.save(async (req,res1)=>{
             try{
                 const empData= await empModel.find().lean();
-                res.render('index', { title: 'this is hbs template engine',emprecd:empData });
+                res.render('index', { title: 'this is hbs template engine',emprecd:empData,success:'record inserted succesfully' });
             }
             catch(e){
                 res.send(e);
