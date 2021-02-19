@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font/css/font-awesome.css">
+
+    <title>{{title}}</title>
+</head>
+<body>
+     {{#if this.success}}
+  <div class="alert alert-success mt-4">
+  <strong>Success!</strong> {{success}}
+  </div>
+  {{/if}}
+    <form action="/users/upload" method="post" role="form" enctype="multipart/form-data" class="mt-5">
+        
+        
+            <div class="row">
+                
+                <label for="file" class=" ml-5">upload File/image</label>
+                <div class="col-md-3">
+                    <input type="file" class="form-control"name="file">
+                </div>
+                <div class=" bg-primary">
+                    <button  type="submit" class="btn btn-primary"value="">upload</button>
+                </div>
+            </div>
+            
+    </form>
+{{!-- <img src="/upld/file_1613663872710.jpeg" alt=""> --}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="table ">
+               
+                   <tr>
+                       <td {{#each dspImg}}>
+                        <img src="/upld/{{this.file}}" alt="img" style="width: 30%;height:40%">
+                        </td>
+                   </tr>
+               {{/each}}
+        </div>
+       </div> 
+    </div>   
+    </body>
+
+</html>

@@ -19,8 +19,10 @@ app.use('/bootstrap',express.static(path.join(__dirname,"../node_modules/bootstr
 app.use('/js',express.static(path.join(__dirname,"../node_modules/bootstrap/dist")))
 app.use('/jq',express.static(path.join(__dirname,"../node_modules/jquery/dist")))
 app.use('/font',express.static(path.join(__dirname,"../node_modules/font-awesome")))
-
 app.use('/css',express.static(path.join(__dirname,"public/stylesheet")))
+app.use('/upld',express.static(path.join(__dirname,"public/uploads")))
+
+
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
 

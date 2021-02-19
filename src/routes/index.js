@@ -5,7 +5,6 @@ const Employee = require('../models/employee');
 var empModel=require('../models/employee');
 var empdt=empModel.find({});
 
-
 // const { registerPartials }=require('hbs');
 // var path = require('path');
 // var partialsPath=path.join(__dirname,'views/partials');
@@ -102,7 +101,7 @@ router.get('/delete/:_id', async (req,res,next)=>{
                 const empData= await empModel.find().lean();
                 res.render('index', { title: 'this is hbs template engine',emprecd:empData,success:'Records updated successfully' });
     
-            })     
+     })     
            
 
 router.post('/',async (req,res)=>{
