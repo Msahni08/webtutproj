@@ -1,0 +1,65 @@
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font/css/font-awesome.css">
+<div class="container">
+ <div style="width: 150px; height:50px;background:#c40746; margin:30px">   
+<button class="btn btn primary"><a href="/"> Home Page</a></button>
+</div>
+  {{#if this.success}}
+  <div class="alert alert-success mt-4">
+  <strong>!</strong> {{success}}
+  </div>
+  {{/if}}
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6 bg-info rounded shadow py-3 myRecForm">
+        <form action="/" method="POST">
+            <div class="mb-3 ">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="Name" placeholder="Enter Your Name" name="name" required>
+           </div>
+            <div class="mb-3 ">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="text" class="form-control" id="mobile" placeholder="Enter Your Mobile Number" name="mobile" required>
+           </div>
+            <div class="mb-3 ">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Enter Your Email" name="email" required>
+           </div>
+              <div class="mb-3 ">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" placeholder="Enter Your Address" name="address" required>
+           </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age" placeholder="Enter Your Age" name="age" required>
+                </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="fml" name="gender" class="custom-control-input" value="female" required>
+                <label class="custom-control-label" for="fml">Female</label>
+           </div>
+           <div class="custom-control custom-radio">
+                <input type="radio" id="mle" name="gender" class="custom-control-input" value="male" default required>
+                <label class="custom-control-label" for="mle">Male</label>
+           </div>
+           
+            <div class="mb-3 ">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter Your password" name="password" required>
+           </div>
+           
+           <div class="mb-3 ">
+                <label for="cpassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="cpassword" placeholder="Enter Your cpassword" name="cpassword" required>
+           </div>
+            
+           
+            <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+    </div>
+    
+</div>
+</div>
+

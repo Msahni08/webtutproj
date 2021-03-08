@@ -1,0 +1,29 @@
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+
+
+<form class="modal-content" action="login" method="POST" >
+    <div class="container">
+      <h1>Sign In</h1>
+       {{#if this.success}}
+  <div class="alert alert-success mt-4">
+  <strong></strong> {{success}}
+  </div>
+  {{/if}}
+      <hr>
+    
+
+      <label for="mobile"><b>Mobile</b></label>
+      <input type="text" placeholder="Enter Mobile" name="mobile" >
+      
+
+       <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="password" > 
+     
+      <div class="clearfix">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <button type="submit" class="signupbtn">Sign Up</button>
+      </div>
+    </div>
+  </form>

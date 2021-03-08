@@ -1,10 +1,18 @@
 var express = require('express');
-const app =express();
 var router = express.Router();
 var empModel=require('../models/employee');
 var uplImg=require('../models/fileupload');
 var multer  = require('multer')
 var path=require('path')
+var jwt = require('jsonwebtoken')
+var bcrypt=require('bcryptjs')
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+    const LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./scratch');
+  }
+// app.use('/bootstrap',express.static(path.join(__dirname,"../node_modules/bootstrap/dist/")))
+
 // router.use(express.static('./src/public/uploads'))
 
 
@@ -40,8 +48,14 @@ router.get('/upload_image', async (req,res,next)=>{
       
     });
 
-router.get('/register',(req,res)=>{
-    res.render('index')
+router.get('/registers',checklogin,(req,res)=>{
+  loginUser=localStorage.getItem('userlogin')
+   loginIdToken=localStorage.getItem('userToken')
+    if(loginUser){
+      res.redirect('/');
+    }else{
+      res.render('register')
+    }
 })
 router.get('/upload', (req,res)=>{
     res.render('upload_image',{title:'image upload',success:''})
@@ -58,4 +72,80 @@ router.post('/upload',upload,async (req,res,next)=>{
     console.log(getImg)
     res.render('upload_image', { title: 'dispimg',dspImg:getImg,success:filuplod });
     })
+// Get Home page
+    router.get('/home',(req,res)=>{
+        res.redirect('/')
+    })
+
+    //middleware for check login
+    function checklogin(req,res,next){
+      var myToken =localStorage.getItem('userToken')
+        try {
+            var decoded = jwt.verify(myToken, 'LoginToken');
+          } catch(err) {
+            res.redirect('login')
+          }
+          next();
+    }
+ 
+  router.get('/login',async(req,res)=>{
+    var myToken =localStorage.getItem('userToken')
+    const empData= await empModel.find().lean();
+    if(myToken){
+    res.render('managePass',{emprecd:empData})
+    }
+    else{
+      res.render('login')
+    }
+  })  
+
+  router.post('/login',async (req,res)=>{
+    // const empPass= empModel.find().lean();
+    try{
+      var Mobi =req.body.mobile;
+      var Pass= req.body.password;
+     var empmob= await empModel.findOne({mobile:Mobi});
+     var empmo=empmob.password;
+
+     //compare bcrypted password
+     var byt =bcrypt.compareSync(Pass,empmo);
+    
+      if(byt){
+        var getuserId=empmo._id
+        var token = jwt.sign({userid: getuserId }, 'LoginToken');
+        localStorage.setItem('userToken', token);
+        localStorage.setItem('userlogin', Mobi);
+
+        const empData= await empModel.find().lean();
+        res.status(201).render('managePass', { emprecd:empData});
+      }
+      else{
+        res.status(404).render("login",{success:'Invalid Mobile Number or password'});
+      }
+    }
+    catch(err){
+      res.render('login',{success:'Kindly Enter Valid Mobile Number'})
+    }
+ 
+}) 
+  router.get('/logout',(req,res)=>{
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userlogin')
+
+    res.redirect('/');
+}) 
+  
+
+ router.get('/mypage',checklogin,(req,res)=>{
+   loginUser=localStorage.getItem('userlogin')
+   loginIdToken=localStorage.getItem('userToken')
+
+   if(loginUser){
+   res.render('myPage',{logMob:loginUser,logID:loginIdToken});
+   }
+   else{
+     res.redirect('login')
+   }
+ }) 
+
 module.exports = router;

@@ -1,0 +1,24 @@
+ul{
+list-style: none;
+/* background-color: cyan; */
+width: 100%;
+}
+li{
+    display: inline-block;
+    margin: 2%;
+    /* background-color: darkgoldenrod; */
+    font-size: large;
+    width: 150px;
+}
+.nav{
+    width: auto;
+    background-color: crimson;
+    margin-top: 2%;
+}
+
+button{
+    width: 150px;
+    background-color:crimson;
+    margin-top: 10px;
+    
+}
