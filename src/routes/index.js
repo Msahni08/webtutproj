@@ -101,6 +101,7 @@ router.get('/delete/:_id', async (req,res,next)=>{
                 const empData= await empModel.find().lean();
                 // res.render('index', { title: 'Update page',emprecd:empData,success:'Records updated successfully' });
                 res.redirect('/')
+                next();
      })     
    //middleware for check mobile
    function checkMobile(req,res,next){

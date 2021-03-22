@@ -1,0 +1,152 @@
+.addcatInput {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    /* z-index: 30; */
+    top: 25%;
+    left: 30%;
+    background:darkcyan;
+  }
+
+  .addcatInput label ,input{
+      position: relative;
+      width: 250px;
+      height: 40px;
+      top: 10%;
+      left: 10%;
+      margin: 0 0 10px 10px ;
+      font-size: 1.2em;
+
+  }
+  .addcatInput p{
+      position: relative;
+      margin-top: 0px;
+      background-color: darkgoldenrod;
+      height: 50px;
+      line-height: 2.2em;
+      font-size: 1.5em;
+      color:#1900ff;
+      border: 1px solid blueviolet;
+
+  }
+  button{
+      position: absolute;
+      margin:60px -40%;
+      background-color: coral;
+      border-radius: 0.3rem;
+      height: 30px;
+      
+  }
+  button:hover{
+      background-color: green;
+  }
+ 
+  .addcatInput a{
+       position: absolute;
+       margin-top: 70px;
+       text-decoration:none;
+  }
+
+  .addcatInput a:hover{
+    color:greenyellow;
+}
+
+.addPss{
+    position: absolute;
+    width: 750px;
+    height: 700px;
+    /* z-index: 30; */
+    top: 25%;
+    left: 30%;
+    background:darkcyan;
+    bottom: 10%;
+}
+
+.addPss label ,.selectpass{
+    position: relative;
+    width: 500px;
+    height: 40px;
+    top: 10%;
+    left: 10%;
+    margin: 0 0 10px 10px ;
+    font-size: 1.2em;
+
+}
+
+.addPss p{
+    position: relative;
+    margin-top: 0px;
+    background-color: darkgoldenrod;
+    height: 50px;
+    line-height: 2.2em;
+    font-size: 1.5em;
+    color:#1900ff;
+    border: 1px solid blueviolet;
+
+}
+.addPss button{
+    position: absolute;
+    top:75%;
+    left: 70%;
+    background-color: coral;
+    border-radius: 0.3rem;
+    height: 30px;
+    
+}
+
+.addPss a {
+    position: absolute;
+    top: 90%;
+    text-decoration:none;
+    left: 5%;
+    
+}
+
+#passlabel{
+    position: absolute;
+    width: 250px;
+    height: 40px;
+    top: 55%;
+    left: 3%;
+    margin: 0 0 10px 10px ;
+    font-size: 1.2em;
+}
+ textarea{
+        position: absolute;
+        left:32%;
+        top:40%;
+        width: 50%;
+        height: 50%;
+}
+.txt{
+    width: 500px;
+    margin-left: 25%;
+}
+
+option{
+    color: red;
+    background-color: slategray;
+}
+select{
+    background-color:darkgoldenrod;
+}
+
+.projname{
+    position: relative;
+    width: 500px;
+    height: 40px;
+    top: 10%;
+    left: 23.5%;
+    margin: 0 0 10px 10px ;
+    font-size: 1.2em;
+    background-color:darkgoldenrod;
+}
+#paslabel{
+    position: absolute;
+    width: 250px;
+    height: 40px;
+    top: 19%;
+    left: 4%;
+    margin: 0 0 10px 10px ;
+    font-size: 1.2em;
+}

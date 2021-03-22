@@ -5,18 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/navbar.css">
 
     <title>Document</title>
 </head>
 <body>
     <div class="nav">
     <ul>
-      <button><a href="users/home"> <li>Home</li></a></button>
-      <button> <a href="users/login">    <li>Login</li></a></button>
-      <button> <a href="users/registers">  <li>Registration</li></a></button>
-       <button><a href="users/logout">   <li>Logout</li></a></button>
-       <button><a href="users/mypage">   <li>mypage</li></a></button>
-<div class="navbar-header" style="float:right;margin-top:1% "><a class="navbar-brand"href="#">Logged as : {{logMob}}</a> </div>
+      <li><a href="#"> Awasome web Tutorial</a>
+           <ul id="log">
+              <li>  <a href="#">Link1</a></li>
+              <li>  <a href="#">link2</a></li>
+              <li>  <a href="#">Link3</a></li>
+            </ul>
+      </li>  
+      <li><a href="users/passManagement">Password Management</a></li>
+      <li>  <a href="users/registers">Registration</a></li>
+      <li>  <a href="users/login">Login</a></li>
+
+      <li>  <a href="#"> Products</a>
+          <ul id="cat">
+            <li><a href="#">Link1</a></li>
+            <li><a href="#">Link2</a></li>
+          </ul>
+      </li>
+      <li>  <a href="#">Products </a>
+      <ul id="pass">
+            <li><a href="#">product1</a></li>
+            <li><a href="#">product2</a></li>
+
+          </ul>
+      </li>  
+    <div class="navbar-header" style="float:right;margin-top:1%;text-align:left;position:absolute;margin-left:125% "><a class="navbar-brand"href="#">Logged as : {{logMob}}</a> </div>
     </ul>
   </div>
   

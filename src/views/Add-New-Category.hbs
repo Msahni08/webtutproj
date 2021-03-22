@@ -1,0 +1,29 @@
+
+    {{!-- <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/addNewCat.css">
+
+{{>passwordCategory_Nav}}
+
+  </div>
+  
+        <div class="addcatInput">
+           
+            <form method="post" action="AddNewCategory">
+                <p>Add New Password Category</p>
+                {{#if this.errors}}
+                    <div style="color: red; margin:5px;font-size:20px; bolder;">
+                        <strong>!{{errors.passcat.msg}}</strong>
+                   </div>
+                {{/if}}
+                  {{#if this.success}}
+                    <div style="color: blue; margin:5px;font-size:20px; bolder;">
+                        <strong>!{{success}}</strong>
+                   </div>
+                {{/if}}
+               <label for="User Name">User Name</label>  <input type="text" placeholder="Enter Password Category Name" name="passcat">
+               <button type="submit">Add Category</button>
+             </form>  
+
+             <a href="#">View All Category List</a>
+        </div>
