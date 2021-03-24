@@ -1,0 +1,76 @@
+    <link rel="stylesheet" href="/font/css/font-awesome.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+
+{{>passwordCategory_Nav}}
+     <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
+
+<br>
+ {{#if this.success}}
+  <div class="alert alert-success col-md-2 mt-4">
+  <strong>!</strong> {{success}}
+  </div>
+  {{/if}}
+<h3><p>Password Category List</p></h3>
+
+<table class="table">
+      <thead>
+        <tr>
+          <th>Password Category Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      
+      <tbody>   
+          
+            {{#each data }} 
+            <tr>
+                <td>{{this.passcatb}}</td>
+                <td><a class ="btn btn-primary btn-xs"href="/passmanagement/edit/{{this._id}}"><i class=" fa fa-edit"></i></a>
+                <a class ="btn btn-danger btn-xs"href="/passmanagement/delete/{{this._id}}"><i class=" fa fa-trash"></i></a>
+                </td> 
+
+              </tr>
+              {{/each}}
+          
+       </tbody>      
+    </table>
+
+    {{!-- {{page}} --}}
+   {{!-- {{#if page>0}}
+      {
+        <ul class="pagination text-center">
+          {{#if (current==1)}}{
+              <li class="disabled"><a>First</a></li>
+          }{{else}}{
+            <li><a href="/password_managment/1">First</a></li>
+          }
+          {{/if}}
+          {{var i=(Number(current)>5 ? Number(current)-4 :1)}}
+          {{#if (i !==1)}}{
+            <li class="disabled"><a>...</a></li>
+          }
+          {{/if}}
+
+
+        </ul>
+      }
+    {{/if}} --}}
+    {{!-- <div class="pagination pagination-centered">
+  <ul>
+    {{#paginate pagination type="first"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">First</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="previous"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Prev</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="middle" limit="7"}}
+      <li {{#if active}}class="active"{{/if}}><a href="?p={{n}}">{{n}}</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="next"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Next</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="last"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Last</a></li>
+    {{/paginate}}
+  </ul>
+</div> --}}

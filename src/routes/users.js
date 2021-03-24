@@ -1,14 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var empModel=require('../models/employee');
-var passcatgr=require('../models/pass_category');
-var sendpss =require('../models/add_pass')
 var uplImg=require('../models/fileupload');
 var multer  = require('multer')
 var path=require('path')
 var jwt = require('jsonwebtoken')
 var bcrypt=require('bcryptjs')
 const { body, validationResult } = require('express-validator');
+
+// fndcategory=passcatgr.find({});
+// Handlebars=require('handlebars')
+// var paginate = require('handlebars-paginate');
+// Handlebars.registerHelper('paginate', paginate);
 
 if (typeof localStorage === "undefined" || localStorage === null) {
     const LocalStorage = require('node-localstorage').LocalStorage;
@@ -51,15 +54,7 @@ router.get('/upload_image', async (req,res,next)=>{
       
     });
 
-router.get('/registers',(req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-   loginIdToken=localStorage.getItem('userToken')
-    if(loginIdToken){
-      res.redirect('/');
-    }else{
-      res.render('registers')
-    }
-})
+
 router.get('/upload', (req,res)=>{
     res.render('upload_image',{title:'image upload',success:''})
 })
@@ -91,16 +86,7 @@ router.post('/upload',upload,async (req,res,next)=>{
           next();
     }
  
-  router.get('/login',async(req,res)=>{
-    var myToken =localStorage.getItem('userToken')
-    const empData= await empModel.find().lean();
-    if(myToken){
-    res.render('managePass',{emprecd:empData})
-    }
-    else{
-      res.render('login')
-    }
-  })  
+ 
 
   router.get('/login2',async(req,res)=>{
     var myToken =localStorage.getItem('userToken')
@@ -113,41 +99,7 @@ router.post('/upload',upload,async (req,res,next)=>{
     }
   }) 
 
-  router.post('/login',async (req,res)=>{
-    // const empPass= empModel.find().lean();
-    try{
-      var Mobi =req.body.mobile;
-      var Pass= req.body.password;
-     var empmob= await empModel.findOne({mobile:Mobi});
-     var empmo=empmob.password;
-
-     //compare bcrypted password
-     var byt =bcrypt.compareSync(Pass,empmo);
-    
-      if(byt){
-        var getuserId=empmo._id
-        var token = jwt.sign({userid: getuserId }, 'LoginToken');
-        localStorage.setItem('userToken', token);
-        localStorage.setItem('userlogin', Mobi);
-
-        const empData= await empModel.find().lean();
-        res.status(201).render('managePass', { emprecd:empData});
-      }
-      else{
-        res.status(404).render("login",{success:'Invalid Mobile Number or password'});
-      }
-    }
-    catch(err){
-      res.render('login',{success:'Kindly Enter Valid Mobile Number'})
-    }
  
-}) 
-  router.get('/logout',(req,res)=>{
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userlogin')
-
-    res.redirect('/');
-}) 
 router.get('/logout2',(req,res)=>{
   localStorage.removeItem('userToken');
   localStorage.removeItem('userlogin')
@@ -167,190 +119,57 @@ router.get('/logout2',(req,res)=>{
    }
  }) 
 
- router.get('/passManagement',async (req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  if(loginUser){
-   try{
-    getpass= await passcatgr.find().lean()
-    console.log(getpass)
-    res.render('password_managment',{title:'password category page',data:getpass,success:''})
-   }
-   catch(err){
+//  router.get('/passManagement',async (req,res)=>{
+//   loginUser=localStorage.getItem('userlogin')
+//   if(loginUser){
+//    var perPage=1;
+//    var page=req.params.page || 1;
+//    fndcategory.skip((perPage*page)-perPage)
+//             .limit(perPage).exec((err,count)=>{
+//               if(error) throw error;
+//                passcatgr.countDocuments({}).exec((err,count)=>{
+//                 res.render('password_managment',{records:data,
+                  
+//                   current:page,
+//                   pages:Math.ceil(count/perPage)})
+           
+//             })
+//   })
+// }
+//   else{
+//     res.send('login first')
+//   }
+//  })
 
-   }
-  }
-  else{
-    res.send('login first')
-  }
- })
-
- router.get('/passManagement/delete/:_id',async (req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  if(loginUser){
-    try{
-      var id= req.params._id;   
-          var del= await passcatgr.findByIdAndDelete(id).lean();
-          const empData= await passcatgr.find().lean();
-          res.redirect('/users/passManagement')
-          
-      }
-      catch(e){
-          res.status(40).send(e);
-      }
-      }
-    }
- )
-
- router.get('/passManagement/edit/:_id', async (req,res)=>{
-  var id= req.params._id;   
-      var editcat= await passcatgr.findById(id).lean();
-      res.render('editPasscat', { title: 'Edit page',editpass:editcat });
-    
-
-  })
-
-  router.post('/updatecatg',async (req,res)=>{
-      try{ 
-        var updatecat= await passcatgr.findByIdAndUpdate(req.body.id,{
-          passcatb:req.body.passcat
-        }).lean();
-        getpass= await passcatgr.find().lean()
-        res.render('password_managment',{data:getpass,success:'Data Update Successfully'})
-        
-      }
-      catch(err){
-          res.send(err)
-      }
-     
-    })
- router.get('/AddNewCategory',(req,res)=>{
-   res.render('Add-New-Category',{title:'add new category',errors:''})
- })
- router.post('/AddNewCategory',checklogin,[ body('passcat','please inter password category name').isLength({ min: 1 }),],async (req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  const errors = validationResult(req);
-  try{
-
-    if (!errors.isEmpty()) {
-      console.log(errors.mapped());
-      res.render('Add-New-Category',{title:'add new category',loginuser:loginUser,errors:errors.mapped()})
-    }
-    else{
-        
-        var passdetails =new passcatgr({
-        passcatb:req.body.passcat 
-        })
-
-        const passcatgry= await passdetails.save();
-        console.log(passcatgry)
-        res.render('Add-New-Category',{title:'add new category',logMob:loginUser,loginuser:loginUser,success:'Password category inserted successfully'})
-    }
-  }
-    catch(err){
-      res.status(404).send('etc error')
-    }
-  }
-  
-)
-
- router.get('/dashboard',checklogin,(req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  loginIdToken=localStorage.getItem('userToken')
-  if(loginUser){
-    res.render('dashboard',{logMob:loginUser})
-  }
- })
-
- router.get('/Add-New-Password', async (req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-if(loginUser){
-  try{
-    getpass= await passcatgr.find().lean()
-    res.render('Add-New-Password',{data:getpass,logMob:loginUser,success:''})
-  }
-  catch(err){
-    res.send(err)
-  }
  
-}else{
-  res.send('login first')
-}
-})
+
+  
+
  
+//  router.post('/Add-New-Password',checklogin,async (req,res)=>{
   
+//   try{
+//     loginUser=localStorage.getItem('userlogin')
+//     loginIdToken=localStorage.getItem('userToken')
+//         selctcatgry=req.body.addPassword
+//         passdetls=req.body.editor
+//         projdtl=req.body.projtname
 
- router.get('/View-All-Password',checklogin,async (req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-   try{
-    var getpassdtl= await sendpss.find().lean();
-    res.render('View-All-Password',{logMob:loginUser,getpassdl:getpassdtl,success:'' });
-    res.render()
-   }
-   catch{
+//        const sendpass = new sendpss({
+//         addPassword:selctcatgry,
+//         projtname:projdtl,
+//         editor:passdetls,
+//        })
+//        const sendpassdetls= await sendpass.save();
+//        console.log(sendpassdetls)
+//        getpass= await passcatgr.find().lean()
+//        res.render('Add-New-Password',{data:getpass,logMob:loginUser,success:"password details send successfully"})
+//   }
+//   catch(err){
+//     res.send(err);
+//   }
+//  })
 
-   }
-   
- })
 
- router.post('/AddNewCatogory',checklogin,async (req,res)=>{
-  
-  try{
-    loginUser=localStorage.getItem('userlogin')
-    loginIdToken=localStorage.getItem('userToken')
-        selctcatgry=req.body.addPassword
-        passdetls=req.body.editor
-        projdtl=req.body.projtname
 
-       const sendpass = new sendpss({
-        addPassword:selctcatgry,
-        projtname:projdtl,
-        editor:passdetls,
-       })
-       const sendpassdetls= await sendpass.save();
-       console.log(sendpassdetls)
-       getpass= await passcatgr.find().lean()
-       res.render('Add-New-Password',{data:getpass,logMob:loginUser,success:"password details send successfully"})
-  }
-  catch(err){
-    res.send(err);
-  }
- })
- router.get('/paddedit/:_id',checklogin,async (req,res)=>{
-  try{
-    loginUser=localStorage.getItem('userlogin')
-    loginIdToken=localStorage.getItem('userToken')
-    var id= req.params._id; 
-    var getpassdtl= await passcatgr.find().lean();
-    var editpassword= await sendpss.findById(id).lean();
-    res.render('passupdate',{editpas:editpassword,data:getpassdtl})
-  
-  } 
-  catch(err){
-    res.send(err)
-  }
-  
-})
-
-router.post('/updateckeditpass',checklogin,async (req,res)=>{
-  
-  try{
-    loginUser=localStorage.getItem('userlogin')
-    loginIdToken=localStorage.getItem('userToken')
-    console.log(loginUser)  ;
-    console.log(loginIdToken);  
-    var updatepass= await sendpss.findByIdAndUpdate(req.body.id,{
-      addPassword :req.body.addPassword,
-      projtname :req.body.projtname,
-      editor:req.body.editor
-    }).lean();
-
-     console.log('update data:-'+updatepass)   
-    getpassdtl= await sendpss.find().lean()
-    console.log('all view data:-'+getpassdtl)  
-       res.render('/View-All-Password',{getpassdl:getpassdtl,logMob:loginUser,success:"password details Update successfully"})
-  }
-  catch(err){
-    res.send("details not updated");
-  }
-})
 module.exports = router;

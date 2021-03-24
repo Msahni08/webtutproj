@@ -20,6 +20,8 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
     "font-awesome": "^4.7.0",
+    "handlebars": "^4.7.7",
+    "handlebars-paginate": "^0.1.0",
     "hbs": "^4.1.1",
     "jquery": "^3.5.1",
     "jsonwebtoken": "^8.5.1",

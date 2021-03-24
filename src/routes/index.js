@@ -4,7 +4,14 @@ const hbs=require('hbs');
 const { data } = require('jquery');
 var empModel=require('../models/employee');
 var bcrypt=require('bcryptjs')
+var jwt = require('jsonwebtoken')
+// var bcrypt=require('bcryptjs')
+// const { body, validationResult } = require('express-validator');
 
+// if (typeof localStorage === "undefined" || localStorage === null) {
+//     const LocalStorage = require('node-localstorage').LocalStorage;
+//     localStorage = new LocalStorage('./scratch');
+//   }
 
 router.get('/' ,async (req,res)=>{
     try{
@@ -17,6 +24,69 @@ router.get('/' ,async (req,res)=>{
         res.status(404).send(err)
     }
 })
+
+
+router.get('/registers',(req,res)=>{
+    loginUser=localStorage.getItem('userlogin')
+     loginIdToken=localStorage.getItem('userToken')
+      if(loginIdToken){
+        res.redirect('/');
+      }else{
+        res.render('registers')
+      }
+  })
+  router.get('/login',async(req,res)=>{
+    var myToken =localStorage.getItem('userToken')
+    const empData= await empModel.find().lean();
+    if(myToken){
+    res.render('managePass',{emprecd:empData})
+    }
+    else{
+      res.render('login')
+    }
+  }) 
+
+//   router.get('/partial',async(req,res)=>{
+//     // localStorage.setItem('userToken', token);3
+//     localStorage.setItem('userlogin', Mobi);
+//     // const empData= await empModel.find().lean();
+//     if(myToken){
+//     res.render('partials/nav',{mobi_no:Mobi,usrtok:token})
+//     }
+//     else{
+//       res.render('login')
+//     }
+//   }) 
+
+  router.post('/login',async (req,res)=>{
+    // const empPass= empModel.find().lean();
+    try{
+      var Mobi =req.body.mobile;
+      var Pass= req.body.password;
+     var empmob= await empModel.findOne({mobile:Mobi});
+     var empmo=empmob.password;
+
+     //compare bcrypted password
+     var byt =bcrypt.compareSync(Pass,empmo);
+    
+      if(byt){
+        var getuserId=empmo._id
+        var token = jwt.sign({userid: getuserId }, 'LoginToken');
+        localStorage.setItem('userToken', token);
+        localStorage.setItem('userlogin', Mobi);
+
+        const empData= await empModel.find().lean();
+        res.status(201).render('managePass', { emprecd:empData});
+      }
+      else{
+        res.status(404).render("login",{success:'Invalid Mobile Number or password'});
+      }
+    }
+    catch(err){
+      res.render('login',{success:'Kindly Enter Valid Mobile Number'})
+    }
+ 
+}) 
 router.post('/search', async (req,res)=>{
     var fltrName=req.body.fltrname;
     var fltrEmail=req.body.fltremail;
@@ -65,6 +135,13 @@ router.post('/search', async (req,res)=>{
     res.render('index', { title: 'this is hbs template engine',emprecd:empFilter,success:'' });
     
 })
+
+router.get('/logout',(req,res)=>{
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userlogin')
+
+    res.redirect('/');
+}) 
 
 router.get('/delete/:_id', async (req,res,next)=>{
     try{

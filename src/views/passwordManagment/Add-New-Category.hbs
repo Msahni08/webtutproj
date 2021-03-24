@@ -1,15 +1,15 @@
 
+{{>passwordCategory_Nav}}
     {{!-- <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"> --}}
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/addNewCat.css">
-
-{{>passwordCategory_Nav}}
+     <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
 
   </div>
   
         <div class="addcatInput">
            
-            <form method="post" action="/users/updatecatg">
+            <form method="post" action="AddNewCategory">
                 <p>Add New Password Category</p>
                 {{#if this.errors}}
                     <div style="color: red; margin:5px;font-size:20px; bolder;">
@@ -21,8 +21,7 @@
                         <strong>!{{success}}</strong>
                    </div>
                 {{/if}}
-                <input type="hidden" name="id" value="{{editpass._id}}">
-               <label for="User Name">User Name</label>  <input type="text" placeholder="Enter Password Category Name" name="passcat" value="{{editpass.passcatb}}">
+               <label for="User Name">User Name</label>  <input type="text" placeholder="Enter Password Category Name" name="passcat">
                <button type="submit">Add Category</button>
              </form>  
 

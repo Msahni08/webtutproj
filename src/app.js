@@ -13,6 +13,10 @@ const { registerPartials }=require('hbs')
 const partialsPath=path.join(__dirname,'./views/partials')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const joinRouter = require('./routes/joints');
+const passmanage = require('./routes/passmanagement');
+
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/bootstrap',express.static(path.join(__dirname,"../node_modules/bootstrap/dist/")))
@@ -25,12 +29,15 @@ app.use('/upld',express.static(path.join(__dirname,"public/uploads")))
 
 
 
-
-app.use('/users', usersRouter);
 app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/joints', joinRouter);
+app.use('/passmanagement', passmanage);
+
+
+
 
 app.set('views',path1 );
-// app.set('partials', path.join(__dirname, 'views/partials'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(partialsPath);
 
