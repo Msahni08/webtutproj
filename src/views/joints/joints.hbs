@@ -1,3 +1,32 @@
 {{>joints}}
 
 <h3>Hello world</h3>
+
+<table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>AddPassword</th>
+                <th>Projname</th>
+                <th>Editor</th>
+                <th>Date</th>
+                <th>Join_Id</th>
+                <th>Join_passcatb</th>
+                <th>Join_Date</th>
+            </tr>
+        </thead>
+        <tbody>
+          {{#each joinsDetails}}
+              <tr>
+                <td> {{this._id}}</td>
+                <td> {{this.addPassword}}</td>
+                <td> {{this.projtname}}</td>
+                <td> {{this.editor}}</td>
+                <td> {{this.Date}}</td>
+                <td> {{this.pass_cat_details._id}}</td>
+                <td> {{this.pass_cat_details.passcatb}}</td>
+                <td> {{this.pass_cat_details.Date}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+</table>

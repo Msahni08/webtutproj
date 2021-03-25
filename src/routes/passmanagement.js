@@ -191,13 +191,13 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
         })
 //=================================================================================================================
 
-     router.get('/delete/:_id',checklogin,async (req,res)=>{
+     router.get('/deleteCategory/:_id',checklogin,async (req,res)=>{
       loginUser=localStorage.getItem('userlogin')
       if(loginUser){
         try{
           var id= req.params._id;   
-              var del= await sendpss.findByIdAndDelete(id).lean();
-              const findcat= await sendpss.find().lean();
+              var del= await passcatgr.findByIdAndDelete(id).lean();
+              const findcat= await passcatgr.find().lean();
               res.render('passwordManagment/view-all-category',{logMob:loginUser,data:findcat,success:'Data Deleted Successfully'})
               
           }

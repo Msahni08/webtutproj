@@ -5,13 +5,13 @@ const { data } = require('jquery');
 var empModel=require('../models/employee');
 var bcrypt=require('bcryptjs')
 var jwt = require('jsonwebtoken')
-// var bcrypt=require('bcryptjs')
+var bcrypt=require('bcryptjs')
 // const { body, validationResult } = require('express-validator');
 
-// if (typeof localStorage === "undefined" || localStorage === null) {
-//     const LocalStorage = require('node-localstorage').LocalStorage;
-//     localStorage = new LocalStorage('./scratch');
-//   }
+if (typeof localStorage === "undefined" || localStorage === null) {
+    const LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./scratch');
+  }
 
 router.get('/' ,async (req,res)=>{
     try{
@@ -37,9 +37,10 @@ router.get('/registers',(req,res)=>{
   })
   router.get('/login',async(req,res)=>{
     var myToken =localStorage.getItem('userToken')
+    loginUser=localStorage.getItem('userlogin')
+    if(loginUser){
     const empData= await empModel.find().lean();
-    if(myToken){
-    res.render('managePass',{emprecd:empData})
+    res.render('',{emprecd:empData})
     }
     else{
       res.render('login')
@@ -75,8 +76,9 @@ router.get('/registers',(req,res)=>{
         localStorage.setItem('userToken', token);
         localStorage.setItem('userlogin', Mobi);
 
+       loginUser=localStorage.getItem('userlogin')
         const empData= await empModel.find().lean();
-        res.status(201).render('managePass', { emprecd:empData});
+        res.status(201).render('home', { logMob:loginUser,emprecd:empData});
       }
       else{
         res.status(404).render("login",{success:'Invalid Mobile Number or password'});
