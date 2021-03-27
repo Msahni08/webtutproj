@@ -58,6 +58,7 @@ router.get('/upload_image', async (req,res,next)=>{
 router.get('/upload', (req,res)=>{
     res.render('upload_image',{title:'image upload',success:''})
 })
+
 router.post('/upload',upload,async (req,res,next)=>{
     imgFile=req.file.filename;
     var filuplod=req.file.filename+" uploaded successfully"

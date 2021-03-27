@@ -20,9 +20,10 @@
     
     <div style="margin-bottom: 80px;">
       {{>nav}}
-     <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
+          <h3 style="text-align: right;margin-right:20px;color:red"><img src="/profileImg/{{propic}} " alt="img" style="width: 50px; height:50px;border-radius: 3rem;">Logged as:{{logMob}}</h3> 
+
     </div>
-    
+    {{!-- <img src="/profileImg/{{emprecd.profileImg}}" alt="img" style="width: 50px; height:50px"> --}}
       <h1>Filter Emplyoee Records</h1>
         <div class="col">
           <form action="/search" id="employeeform" class="form-horizontal" method="post" role="form">
@@ -70,6 +71,7 @@
     <table class="table border">
       <thead>
         <tr>
+          <th>Profile Img</th>
           <th>Id</th>
           <th>Name</th>
           <th>Mobile</th>
@@ -87,8 +89,9 @@
       <tbody >
         {{#each emprecd }}
         <tr>
+          <td ><img src="/profileImg/{{this.profileImg}}" alt="img" style="width: 50px; height:50px"></td>
           <td>{{this._id}}</td>
-           <td>{{this.name}}</td>
+          <td>{{this.name}}</td>
           <td>{{this.mobile}}</td>
           <td>{{this.email}}</td>
           <td>{{this.address}}</td> 

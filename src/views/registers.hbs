@@ -18,7 +18,7 @@
 
   <div class="row justify-content-center mt-5 ">
     <div class="col-md-8 bg-success rounded shadow py-3 myRecForm h-75">
-        <form action="/" method="POST">
+        <form action="/" method="POST" enctype="multipart/form-data" >
             <div class="mb-3 ">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="Name" placeholder="Enter Your Name" name="name" required>
@@ -47,6 +47,10 @@
                 <input type="radio" id="mle" name="gender" class="custom-control-input" value="male" default required>
                 <label class="custom-control-label" for="mle">Male</label>
            </div>
+           <div class="mb-4">
+                <label for="img" class="form-label">Profile Image</label>
+                <input type="file" class="form-control" id="img" name="profileImg" alt='img' required>
+                </div>
            
             <div class="mb-4 ">
                 <label for="password" class="form-label">Password</label>

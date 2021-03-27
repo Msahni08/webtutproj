@@ -6,19 +6,41 @@ var empModel=require('../models/employee');
 var bcrypt=require('bcryptjs')
 var jwt = require('jsonwebtoken')
 var bcrypt=require('bcryptjs')
+var multer  = require('multer')
+var path=require('path')
+
+
 // const { body, validationResult } = require('express-validator');
 
 if (typeof localStorage === "undefined" || localStorage === null) {
     const LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./scratch');
   }
+//=====================================================================
+// for storage for file upload
+  var Storage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+        cb(null,'./src/public/uploads/profile_image')},
+    filename: (req, file, cb) =>{
+      cb(null, file.fieldname + '_' + Date.now()+path.extname(file.originalname))
+    }
+  })
+var upload =multer({
+    storage:Storage
+}).single('profileImg');
+//=======================================================================
+
 
 router.get('/' ,async (req,res)=>{
     try{
         loginUser=localStorage.getItem('userlogin')
+        proimge=localStorage.getItem('proimg')
     const empData= await empModel.find().lean();
+        proimg=empData.profileImg
+        console.log("profile img1 "+proimg)
+        console.log("profile img2 "+empData.profileImg)
 
-    res.render('index', { title: 'this is hbs template engine',emprecd:empData ,logMob:loginUser});
+    res.render('', {propic:proimge, title: 'this is hbs template engine',emprecd:empData ,logMob:loginUser,profimg:proimg});
     }
     catch(err){
         res.status(404).send(err)
@@ -28,6 +50,7 @@ router.get('/' ,async (req,res)=>{
 
 router.get('/registers',(req,res)=>{
     loginUser=localStorage.getItem('userlogin')
+    proimge=localStorage.getItem('proimg')
      loginIdToken=localStorage.getItem('userToken')
       if(loginIdToken){
         res.redirect('/');
@@ -35,6 +58,7 @@ router.get('/registers',(req,res)=>{
         res.render('registers')
       }
   })
+
   router.get('/login',async(req,res)=>{
     var myToken =localStorage.getItem('userToken')
     loginUser=localStorage.getItem('userlogin')
@@ -66,6 +90,7 @@ router.get('/registers',(req,res)=>{
       var Pass= req.body.password;
      var empmob= await empModel.findOne({mobile:Mobi});
      var empmo=empmob.password;
+     var profimg=empmob.profileImg
 
      //compare bcrypted password
      var byt =bcrypt.compareSync(Pass,empmo);
@@ -75,10 +100,14 @@ router.get('/registers',(req,res)=>{
         var token = jwt.sign({userid: getuserId }, 'LoginToken');
         localStorage.setItem('userToken', token);
         localStorage.setItem('userlogin', Mobi);
+        localStorage.setItem('proimg', profimg);
+
 
        loginUser=localStorage.getItem('userlogin')
+       proimge=localStorage.getItem('proimg')
+        console.log("Profile img "+proimge)
         const empData= await empModel.find().lean();
-        res.status(201).render('home', { logMob:loginUser,emprecd:empData});
+        res.status(201).render('home', { propic:proimge,logMob:loginUser,emprecd:empData});
       }
       else{
         res.status(404).render("login",{success:'Invalid Mobile Number or password'});
@@ -141,6 +170,8 @@ router.post('/search', async (req,res)=>{
 router.get('/logout',(req,res)=>{
     localStorage.removeItem('userToken');
     localStorage.removeItem('userlogin')
+    localStorage.removeItem('proimg')
+
 
     res.redirect('/');
 }) 
@@ -159,13 +190,17 @@ router.get('/delete/:_id', async (req,res,next)=>{
     })
    
     router.get('/edit/:_id', async (req,res,next)=>{
+    proimge=localStorage.getItem('proimg')
+
         var id= req.params._id;   
             var edt= await empModel.findById(id).lean();
-            res.render('edit', { title: 'Edit page',emprecd:edt });
+            res.render('edit', {propic:proimge, title: 'Edit page',emprecd:edt });
           
 
         })
     router.post('/update', async (req,res,next)=>{   
+    proimge=localStorage.getItem('proimg')
+
                 var edt= await empModel.findByIdAndUpdate(req.body.id,{
                     name:req.body.name,
                     mobile:req.body.mobile,
@@ -212,14 +247,14 @@ router.get('/delete/:_id', async (req,res,next)=>{
 
     }        
 
-router.post('/',checkMobile,checkEmail,async (req,res)=>{
+    //registration Form post
+router.post('/',checkMobile,checkEmail,upload,async (req,res)=>{
     try{
        const pass=req.body.password
        const cpass=req.body.cpassword
        if(pass==cpass){
            bcyppass =bcrypt.hashSync(pass,10);
            bcypcpass =bcrypt.hashSync(cpass,10);
-
         const emp =new empModel( 
             {
             name:req.body.name,
@@ -228,12 +263,15 @@ router.post('/',checkMobile,checkEmail,async (req,res)=>{
             address:req.body.address,
             age: req.body.age,
             gender:req.body.gender,
+            profileImg:req.file.filename,
             password:bcyppass,
             cpassword:bcypcpass ,
+            
             }    
         );
         console.log("data sent to database "+emp)
         const createEmp =await emp.save();
+        console.log(createEmp)
         res.render('registers',{success:'records insterted succefully'})
 
         }

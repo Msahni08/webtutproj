@@ -1,6 +1,8 @@
+    <link rel="stylesheet" href="/font/css/font-awesome.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 {{>joints}}
+ <h3 style="text-align: right;margin-right:20px;color:red"><img src="/profileImg/{{propic}} " alt="img" style="width: 50px; height:50px;border-radius: 3rem;">Logged as:{{logMob}}</h3> 
 
-<h3>Hello world</h3>
 
 <table class="table">
         <thead>
@@ -13,6 +15,9 @@
                 <th>Join_Id</th>
                 <th>Join_passcatb</th>
                 <th>Join_Date</th>
+                <th>Action</th>
+
+                
             </tr>
         </thead>
         <tbody>
@@ -26,6 +31,9 @@
                 <td> {{this.pass_cat_details._id}}</td>
                 <td> {{this.pass_cat_details.passcatb}}</td>
                 <td> {{this.pass_cat_details.Date}}</td>
+                <td><a class ="btn btn-primary btn-ls"href="/joints/join_edit/{{this._id}}"><i class=" fa fa-edit"></i></a>
+                <a class ="btn btn-danger btn-ls"href="/passmanagement/join_delete/{{this._id}}"><i class=" fa fa-trash"></i></a>
+
             </tr>
             {{/each}}
         </tbody>

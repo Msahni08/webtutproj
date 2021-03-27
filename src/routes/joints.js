@@ -24,7 +24,9 @@ function checklogin(req,res,next){
 
 router.get('/',checklogin,async(req,res)=>{
 
-    loginUser=localStorage.getItem('userlogin')
+  loginUser=localStorage.getItem('userlogin')
+  loginIdToken=localStorage.getItem('userToken')
+  proimge=localStorage.getItem('proimg')
         if(loginUser){
          try{
                 joinpass= await sendpss.aggregate([
@@ -40,7 +42,7 @@ router.get('/',checklogin,async(req,res)=>{
                 ).exec()
                 console.log(joinpass);
                 // res.send(joinpass);
-                res.render('joints/joints',{joinsDetails:joinpass})
+                res.render('joints/joints',{propic:proimge,logMob:loginUser,joinsDetails:joinpass})
          }
          catch(err){
                 res.send(err)
