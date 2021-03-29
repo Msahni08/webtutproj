@@ -11,10 +11,15 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/font/css/font-awesome.css">
 
+   {{!-- autocomplete --}}
+    <script src="jqueryUi/jquery-1.12.4.min.js"type="text/javascript"></script> 
+    <link rel="stylesheet" href="jqueryUi/jquery-ui.css">
+
+
+
+
     <title>Nodejs</title>
 </head>
-{{!-- Login as:{{logMob}} --}}
- 
   
   <body>
     
@@ -23,7 +28,6 @@
           <h3 style="text-align: right;margin-right:20px;color:red"><img src="/profileImg/{{propic}} " alt="img" style="width: 50px; height:50px;border-radius: 3rem;">Logged as:{{logMob}}</h3> 
 
     </div>
-    {{!-- <img src="/profileImg/{{emprecd.profileImg}}" alt="img" style="width: 50px; height:50px"> --}}
       <h1>Filter Emplyoee Records</h1>
         <div class="col">
           <form action="/search" id="employeeform" class="form-horizontal" method="post" role="form">
@@ -32,7 +36,7 @@
                   <div class="form-group">
                     <label for="name" class="col-md-12 control-label">By Name</label>
                       <div class="col-md-12">
-                        <input type="text" class="form-control" name="fltrname"placeholder="Enter name">
+                        <input type="text" class="form-control" id="searchName" name="fltrname"placeholder="Enter name">
                       </div>
                   </div>
               </div>
@@ -113,11 +117,42 @@
 
     <br>
 
+<script>
+  $(function(){
+    $('#searchName').autocomplete({
+      source:function(req,res){
+        $.ajax({
+          url:"autocomplete/",
+          dataType:"jsonp",
+          type:"GET",
+          data:req,
+          success:function(data){
+            console.log(data);
+            res(data);
+          },
+          error:function(err){
+            console.log(err.status)
+          }
+        })
+      },
+      minLenght:1,
+      select:function(event,ui){
+        if(ui.item){
+          $("#searchName").text(ui.item.label);
+        }
+      }
+    })
+  })
+</script>
     
  <script src="js/js/bootstrap.js" type="text/javascript"></script>
 <script src="js/js/bootstrap.min.js" type="text/javascript"></script> 
 <script src="jq/jquery.min.js" type="text/javascript"></script>
 <script src="jq/jquery.js" type="text/javascript"></script> 
+
+
+{{!-- autocomplete --}}
+ <script src="jqueryUi/jquery-ui.js" ></script> 
 
 
 

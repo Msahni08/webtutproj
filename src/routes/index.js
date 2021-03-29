@@ -37,9 +37,6 @@ router.get('/' ,async (req,res)=>{
         proimge=localStorage.getItem('proimg')
     const empData= await empModel.find().lean();
         proimg=empData.profileImg
-        console.log("profile img1 "+proimg)
-        console.log("profile img2 "+empData.profileImg)
-
     res.render('', {propic:proimge, title: 'this is hbs template engine',emprecd:empData ,logMob:loginUser,profimg:proimg});
     }
     catch(err){
@@ -198,9 +195,27 @@ router.get('/delete/:_id', async (req,res,next)=>{
           
 
         })
-    router.post('/update', async (req,res,next)=>{   
+    router.post('/update',upload, async (req,res,next)=>{   
     proimge=localStorage.getItem('proimg')
 
+            if(req.file){
+                var edt= await empModel.findByIdAndUpdate(req.body.id,{
+                    name:req.body.name,
+                    mobile:req.body.mobile,
+                    email:req.body.email,
+                    address:req.body.address,
+                    age:req.body.age,
+                    gender:req.body.gender,
+                    profileImg:req.file.filename,
+                    password:req.body.password,
+                    cpassword:req.body.cpassword,
+            }).lean();
+            const empData= await empModel.find().lean();
+            // res.render('index', { title: 'Update page',emprecd:empData,success:'Records updated successfully' });
+            res.redirect('/')
+            next();
+                 }
+            else{
                 var edt= await empModel.findByIdAndUpdate(req.body.id,{
                     name:req.body.name,
                     mobile:req.body.mobile,
@@ -216,8 +231,9 @@ router.get('/delete/:_id', async (req,res,next)=>{
                 // res.render('index', { title: 'Update page',emprecd:empData,success:'Records updated successfully' });
                 res.redirect('/')
                 next();
-     })     
-   //middleware for check mobile
+            }
+        })
+  //middleware for check mobile
    function checkMobile(req,res,next){
     var Mob=req.body.mobile,
     checkexistmob= empModel.findOne({mobile:Mob});
@@ -286,4 +302,28 @@ router.post('/',checkMobile,checkEmail,upload,async (req,res)=>{
     
 })
 
+router.get('/autocomplete',(req,res,next)=>{
+    var regex=new RegExp(req.query["term"],"i")
+    const empFilter= empModel.find({name:regex},{'name':1}).sort({"updated_at":-1}).sort({"updated_at":-1}).limit(20);
+
+    empFilter.exec(function(err,data){
+
+        console.log(data)
+        var result=[];
+        if(!err){
+            if(data && data.length && data.length>0){
+                data.forEach(user=>{
+                    let obj={
+                        id:user._id,
+                        label:user.name
+                    };
+                    result.push(obj);
+                });
+            }
+            console.log(result)
+            res.jsonp(result);
+        }
+    })
+
+})
 module.exports = router;
