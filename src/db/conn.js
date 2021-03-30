@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-mongoose.connect("mongodb://localhost:27017/MyDataBase",{
+mongoose.connect("mongodb+srv://mymongodb:manzy%40012@mymcluster.ceywf.mongodb.net/MyDataBase?retryWrites=true&w=majority",{
     useCreateIndex:true,
     useNewUrlParser:true,
     useUnifiedTopology:true,
