@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var sendpss =require('../models/add_pass')
 var passcatgr=require('../models/pass_category');
+var bootstrapSearch =require('../models/bootstrap_search')
+
 var jwt = require('jsonwebtoken')
 var bcrypt=require('bcryptjs')
 const { body, validationResult } = require('express-validator');
@@ -25,7 +27,6 @@ function checklogin(req,res,next){
 router.get('/',checklogin,async(req,res)=>{
 
   loginUser=localStorage.getItem('userlogin')
-  loginIdToken=localStorage.getItem('userToken')
   proimge=localStorage.getItem('proimg')
         if(loginUser){
          try{
@@ -52,5 +53,21 @@ router.get('/',checklogin,async(req,res)=>{
         }
 })
 //==============================================================================================================
+//Bootstrap search home page
+router.get('/bootstrapSearch',(req,res)=>{
+  loginUser=localStorage.getItem('userlogin')
+  proimge=localStorage.getItem('proimg')
+  res.render('bootstrap_search',{success:'',propic:proimge})
+})
+
+// fetch bootstrap table data from database
+router.get('/get_bootstap_data',async (req,res)=>{
+  loginUser=localStorage.getItem('userlogin')
+  proimge=localStorage.getItem('proimg')
+  const bootstrap_Srch= await bootstrapSearch.find().lean()
+  console.log(bootstrap_Srch)
+  res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+})
+
 
 module.exports = router;

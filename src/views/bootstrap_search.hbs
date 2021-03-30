@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+    <title>Document</title>
+</head>
+<body>
+    <div class="row justify-content-center mt-5 ">
+     <div class="col-md-8 bg-success rounded shadow py-3 myRecForm h-75">
+        <form action="/" method="POST" enctype="multipart/form-data" >
+           <div class="mb-3 ">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="Name" placeholder="Enter Your Name" name="name" required>
+           </div>
+            <div class="mb-4 ">
+                <label for="Position" class="form-label">Position</label>
+                <input type="text" class="form-control" name="Position" >
+           </div>
+            <div class="mb-4 ">
+                <label for="Office" class="form-label">Office</label>
+                <input type="text" class="form-control" id="email" placeholder="Enter Your Email" name="Office">
+           </div>
+              <div class="mb-4 ">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" name="Office">
+           </div>
+            <div class="mb-4">
+                <label for="age" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age"  name="age">
+             </div>
+             <div class="mb-4">
+                <label for="age" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age" placeholder="Enter Your Age" name="age" required>
+             </div>
+             <div class="mb-4">
+                <label for="age" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age" placeholder="Enter Your Age" name="age" required>
+             </div>
+         </form>  
+        </div>
+        </div> 
+    <table id="boottablesearch" class="table table-striped table-bordered" style="width:100%">
+         <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each getbootsearchdata}}
+            <tr>
+                
+                <td>{{this.Name}}</td>
+                <td>{{this.Position}}</td>
+                <td>{{this.Office}}</td>
+                <td>{{this.Age}}</td>
+                <td>{{this.StartDate}}</td>
+                <td>{{this.Salary}}</td>
+               
+            </tr>
+             {{/each}}
+        </tbody>
+    </table>
+</body>
+</html>
