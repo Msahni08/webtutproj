@@ -60,7 +60,7 @@ router.get('/get_bootstap_data',async (req,res)=>{
   proimge=localStorage.getItem('proimg')
   try{
     const bootstrap_Srch= await bootstrapSearch.find().lean()
-    res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+    res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge,success:''})
   }
   catch(err){
     res.send(status)
@@ -85,7 +85,7 @@ router.post('/post_bootstap_data',async (req,res)=>{
       var postDataToDatabade = await postdata.save();
       console.log("postDataToDatabade "+postDataToDatabade);
     const bootstrap_Srch= await bootstrapSearch.find().lean()
-      res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+      res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge,success:"Data Added Successfully"})
 
 })
 

@@ -9,5 +9,5 @@ const bootstrpSchema=mongoose.Schema({
     StartDate:String,
     Salary :String,
 })
-const boot_search = new mongoose.model('bootsercses',bootstrpSchema);
+const boot_search = new mongoose.model('bootstrap_searches',bootstrpSchema);
 module.exports=boot_search;

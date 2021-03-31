@@ -14,9 +14,14 @@
     <title>Document</title>
 </head>
 {{>joints}}
-     <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
-
+  
 <body>
+       <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
+  {{#if this.success}}
+  <div class="alert alert-success mt-4">
+  <strong>Success!</strong> {{success}}
+  {{/if}}
+  </div>
     <div class="row justify-content-center ">
      <div class="col-md-8 bg-success rounded shadow py-3 bootsrch h-75">
         <form action="/joints/post_bootstap_data" method="POST"  >
