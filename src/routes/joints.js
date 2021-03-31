@@ -53,20 +53,40 @@ router.get('/',checklogin,async(req,res)=>{
         }
 })
 //==============================================================================================================
-//Bootstrap search home page
-router.get('/bootstrapSearch',(req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  proimge=localStorage.getItem('proimg')
-  res.render('bootstrap_search',{success:'',propic:proimge})
-})
 
 // fetch bootstrap table data from database
 router.get('/get_bootstap_data',async (req,res)=>{
   loginUser=localStorage.getItem('userlogin')
   proimge=localStorage.getItem('proimg')
-  const bootstrap_Srch= await bootstrapSearch.find().lean()
-  console.log(bootstrap_Srch)
-  res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+  try{
+    const bootstrap_Srch= await bootstrapSearch.find().lean()
+    res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+  }
+  catch(err){
+    res.send(status)
+  }
+  
+})
+//=============================================================================================================
+//send data to database
+router.post('/post_bootstap_data',async (req,res)=>{
+  loginUser=localStorage.getItem('userlogin')
+  proimge=localStorage.getItem('proimg')
+      var postdata= new bootstrapSearch({
+        name:req.body.Name,
+        position:req.body.Position,
+        Office:req.body.Office ,
+        Age:req.body.Age,
+        StartDate:req.body.StartDate,
+        Salary:req.body.Salary
+      })
+      console.log("postdata "+postdata);
+
+      var postDataToDatabade = await postdata.save();
+      console.log("postDataToDatabade "+postDataToDatabade);
+    const bootstrap_Srch= await bootstrapSearch.find().lean()
+      res.render('bootstrap_search',{getbootsearchdata:bootstrap_Srch,propic:proimge})
+
 })
 
 

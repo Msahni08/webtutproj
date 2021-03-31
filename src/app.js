@@ -28,6 +28,7 @@ app.use('/ckedit',express.static(path.join(__dirname,"../node_modules/ckeditor4"
 app.use('/css',express.static(path.join(__dirname,"public/stylesheet")))
 app.use('/upld',express.static(path.join(__dirname,"public/uploads")))
 app.use('/profileImg',express.static(path.join(__dirname,"public/uploads/profile_image")))
+app.use('/DataTable',express.static(path.join(__dirname,"public/jquery_file_bootstap_search")))
 
 
 

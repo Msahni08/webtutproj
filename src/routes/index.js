@@ -59,9 +59,11 @@ router.get('/registers',(req,res)=>{
   router.get('/login',async(req,res)=>{
     var myToken =localStorage.getItem('userToken')
     loginUser=localStorage.getItem('userlogin')
+    proimge=localStorage.getItem('proimg')
+
     if(loginUser){
     const empData= await empModel.find().lean();
-    res.render('',{emprecd:empData})
+    res.redirect('/')
     }
     else{
       res.render('login')
