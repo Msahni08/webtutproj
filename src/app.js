@@ -15,6 +15,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const joinRouter = require('./routes/joints');
 const passmanage = require('./routes/passmanagement');
+const apirout =require('./api/add-Category-Api');
+var session = require('express-session');
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -42,6 +44,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/joints', joinRouter);
 app.use('/passmanagement', passmanage);
+app.use('/api',apirout)
 
 
 

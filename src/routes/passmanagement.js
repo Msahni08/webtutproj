@@ -7,62 +7,80 @@ var bcrypt=require('bcryptjs')
 const { body, validationResult } = require('express-validator');
 
 function checklogin(req,res,next){
-  var myToken =localStorage.getItem('userToken')
+  
+// var myToken =localStorage.getItem('userToken')
     try {
+      var sess=req.session
+      var myToken =localStorage.getItem('userToken')
+      if(sess.mobile){
+        
         var decoded = jwt.verify(myToken, 'LoginToken');
-      } catch(err) {
-        res.redirect('login')
+      }else{
+        res.redirect('/login')
+      }
+        // var decoded = jwt.verify(myToken, 'LoginToken');
+    } catch(err) {
+        res.status(404).send(err)
       }
       next();
 }
   // =============================================================================
 
 router.get('/',checklogin,async(req,res)=>{
-  loginUser=localStorage.getItem('userlogin')
-  proimge=localStorage.getItem('proimg')
+  // loginUser=localStorage.getItem('userlogin')
+  // proimge=localStorage.getItem('proimg')
+    
+      try{
+          var sess=req.session
+          var loginUser=sess.mobile;
+          var proimage= sess.proimg; 
+          // console.log('Mobile no '+loginUser)
+          //   console.log('profile Image'+proimage)
 
-  if(loginUser){
-    try{
-      
-        res.render('passwordManagment/dashboard',{propic:proimge,logMob:loginUser})
-    }catch(err){
-        res.send(err)
-    }
-  }
-  else{
-    res.render('/login',{success:'Need to login first'})
-  }
-})
+          if(sess.mobile){
+            res.render('passwordManagment/dashboard',{propic:proimage,logMob:loginUser})
+          }else{
+            res.render('login',{success:'Need to login first'})
+          }
+          
+        }catch(err){
+            res.send(err)
+      }
+  })
   // =============================================================================
 
 router.get('/Add-New-Password',checklogin, async (req,res)=>{
-    loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    // loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
   if(loginUser){
     try{
       getpass= await passcatgr.find().lean()
-      res.render('passwordManagment/Add-New-Password',{propic:proimge,data:getpass,logMob:loginUser,success:''})
+      res.render('passwordManagment/Add-New-Password',{propic:proimage,data:getpass,logMob:loginUser,success:''})
     }
     catch(err){
       res.send(err)
     }
    
   }else{
-    res.render('/login',{success:'Need to login first'})
+    res.redirect('/login')
   }
   })
   // =============================================================================
 
   router.get('/AddNewCategory',checklogin,async (req,res)=>{
-    loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    // loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
     try{
         if(loginUser){
-        res.render('passwordManagment/Add-New-Category',{propic:proimge,logMob:loginUser,title:'add new category',errors:''})
+        res.render('passwordManagment/Add-New-Category',{propic:proimage,logMob:loginUser,title:'add new category',errors:''})
         }else{
-          res.render('/login',{success:'Need to login first'})
+          res.redirect('/login')
         }
        }
        catch(err){
@@ -73,16 +91,18 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
 
   // =============================================================================
   router.post('/AddNewCategory',checklogin,[ body('passcat','please inter password category name').isLength({ min: 1 }),],async (req,res)=>{
-    loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    // loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
     const errors = validationResult(req);
     if(loginUser){
     try{
   
           if (!errors.isEmpty()) {
             console.log(errors.mapped());
-            res.render('passwordManagment/Add-New-Category',{propic:proimge,title:'add new category',logMob:loginUser,errors:errors.mapped()})
+            res.render('passwordManagment/Add-New-Category',{propic:proimage,title:'add new category',logMob:loginUser,errors:errors.mapped()})
           }
           else{
               
@@ -92,14 +112,14 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
   
                 const passcatgry= await passdetails.save();
                 console.log(passcatgry)
-                res.render('passwordManagment/Add-New-Category',{propic:proimge,title:'add new category',logMob:loginUser,loginuser:loginUser,success:'Password category inserted successfully'})
+                res.render('passwordManagment/Add-New-Category',{propic:proimage,title:'add new category',logMob:loginUser,loginuser:loginUser,success:'Password category inserted successfully'})
               }
       }
         catch(err){
           res.status(404).send(err)
         }
     }else{
-      res.render('/login',{success:'Need to login first'})
+      res.redirect('/login')
 
     }
  })
@@ -107,10 +127,12 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
 //=================================================================================================================
 
     router.post('/Add-New-Password',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-      loginIdToken=localStorage.getItem('userToken')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    //   loginIdToken=localStorage.getItem('userToken')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
           try{
             
@@ -126,13 +148,13 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
               const sendpassdetls= await sendpass.save();
               console.log(sendpassdetls)
               getpass= await passcatgr.find().lean()
-              res.render('passwordManagment/Add-New-Password',{propic:proimge,data:getpass,logMob:loginUser,success:"password details send successfully"})
+              res.render('passwordManagment/Add-New-Password',{propic:proimage,data:getpass,logMob:loginUser,success:"password details send successfully"})
           }
           catch(err){
             res.send(err);
           }
         }else{
-            res.render('/login',{success:'Need to login first'})
+          res.redirect('/login')
 
         }
      })
@@ -141,9 +163,11 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
 
 
     router.get('/view-all-category',checklogin, async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
        try{
         // let page =1 //page number
@@ -152,7 +176,7 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
         // .skip((page-1)*limit)
         // .select('passcatb').limit(limit)
         // console.log(getpass)
-        res.render('passwordManagment/view-all-category',{propic:proimge,logMob:loginUser,title:'password category page',data:getpass,success:''})
+        res.render('passwordManagment/view-all-category',{propic:proimage,logMob:loginUser,title:'password category page',data:getpass,success:''})
     
        }
        catch(err){
@@ -160,7 +184,7 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
        }
       }
       else{
-        res.render('/login',{success:'Need to login first'})
+        res.redirect('/login')
 
       }
      })
@@ -168,32 +192,38 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
     
     
      router.get('/View-All-Password',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
           try{
                 
             var getpassdtl= await sendpss.find().lean()
-            res.render('passwordManagment/View-All-Password',{propic:proimge,logMob:loginUser,getpassdl:getpassdtl,success:'' });
+            res.render('passwordManagment/View-All-Password',{propic:proimage,logMob:loginUser,getpassdl:getpassdtl,success:'' });
             }
           catch{
             res.send(err)
           }
+        }else{
+          res.redirect('/login')
         }
         })
 //=================================================================================================================
     
      router.get('/deletepass/:_id',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
         try{
           var id= req.params._id;   
               var del= await sendpss.findByIdAndDelete(id).lean();
               const findcat= await sendpss.find().lean();
-              res.render('passwordManagment/View-All-Password',{propic:proimge,logMob:loginUser,getpassdl:findcat,success:'Data Deleted Successfully'})
+              res.render('passwordManagment/View-All-Password',{propic:proimage,logMob:loginUser,getpassdl:findcat,success:'Data Deleted Successfully'})
               
           }
           catch(e){
@@ -201,22 +231,24 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
           }
           }
           else{
-            res.render('/login',{success:'Need to login first'})
+            res.redirect('/login')
     
           }  
         })
 //=================================================================================================================
 
      router.get('/deleteCategory/:_id',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
         try{
           var id= req.params._id;   
               var del= await passcatgr.findByIdAndDelete(id).lean();
               const findcat= await passcatgr.find().lean();
-              res.render('passwordManagment/view-all-category',{propic:proimge,logMob:loginUser,data:findcat,success:'Data Deleted Successfully'})
+              res.render('passwordManagment/view-all-category',{propic:proimage,logMob:loginUser,data:findcat,success:'Data Deleted Successfully'})
               
           }
           catch(e){
@@ -224,7 +256,7 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
           }
           }
        else{
-            res.render('/login',{success:'Need to login first'})
+           res.redirect('/login')
     
           }     
         }
@@ -232,43 +264,47 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
 //=================================================================================================================
     
      router.get('/edit/:_id',checklogin, async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
     if(loginUser){
       try{
           var id= req.params._id;   
               var editcat= await passcatgr.findById(id).lean();
-              res.render('passwordManagment/editPasscat', {propic:proimge,logMob:loginUser, title: 'Edit page',editpass:editcat });
+              res.render('passwordManagment/editPasscat', {propic:proimage,logMob:loginUser, title: 'Edit page',editpass:editcat });
        }catch(e){
           res.send(e)
        }
         
     }else{
-            res.render('/login',{success:'Need to login first'})
+           res.redirect('/login')
     
           }  
       })
 //=================================================================================================================
     
       router.post('/updatecatg',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
         if(loginUser){
           try{ 
             var updatecat= await passcatgr.findByIdAndUpdate(req.body.id,{
               passcatb:req.body.passcat
             }).lean();
             getpass= await passcatgr.find().lean()
-            res.render('passwordManagment/view-all-category',{propic:proimge,logMob:loginUser,data:getpass,success:'Data Update Successfully'})
+            res.render('passwordManagment/view-all-category',{propic:proimage,logMob:loginUser,data:getpass,success:'Data Update Successfully'})
             
           }
           catch(err){
               res.send(err)
           }
         }else{
-          res.render('/login',{success:'Need to login first'})
+          res.redirect('/login')
   
         }   
          
@@ -279,53 +315,60 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
     
      router.get('/dashboard',checklogin,async (req,res)=>{
 
-      loginUser=localStorage.getItem('userlogin')
-      loginIdToken=localStorage.getItem('userToken')
-    proimge=localStorage.getItem('proimg')
+      // loginUser=localStorage.getItem('userlogin')
+      // loginIdToken=localStorage.getItem('userToken')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
 
       if(loginUser){
         try{
-              res.render('dashboard',{logMob:loginUser})
+              res.render('dashboard',{logMob:loginUser,propic:proimage})
         }
         catch(err){
           res.send(err)
         }}
         else{
-          res.render('/login',{propic:proimge,logMob:loginUser,success:'Need to login first'})
+          res.redirect('/login')
   
         }   
      })
 //=================================================================================================================
 
      router.get('/editpass/:_id',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-      loginIdToken=localStorage.getItem('userToken')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    //   loginIdToken=localStorage.getItem('userToken')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
       if(loginUser){
           try{
             
             var id= req.params._id; 
             var getpassdtl= await passcatgr.find().lean();
             var editpassword= await sendpss.findById(id).lean();
-            res.render('passwordManagment/passupdate',{propic:proimge,editpas:editpassword,logMob:loginUser,data:getpassdtl})
+            res.render('passwordManagment/passupdate',{propic:proimage,editpas:editpassword,logMob:loginUser,data:getpassdtl})
           
           } 
           catch(err){
             res.send(err)
           }}
        else{
-            res.render('/login',{success:'Need to login first'})
+           res.redirect('/login')
     
           }   
     })
 //=================================================================================================================
     
      router.post('/updateckeditpass',checklogin,async (req,res)=>{
-      loginUser=localStorage.getItem('userlogin')
-      loginIdToken=localStorage.getItem('userToken')
-    proimge=localStorage.getItem('proimg')
-
+    //   loginUser=localStorage.getItem('userlogin')
+    //   loginIdToken=localStorage.getItem('userToken')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    var loginUser=sess.mobile;
+    var proimage= sess.proimg; 
     if(loginUser){
       try{ 
         var updatepass= await sendpss.findByIdAndUpdate(req.body.id,{
@@ -337,7 +380,7 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
          var getpass= await sendpss.find().lean()
         //  console.log(getpass)
 
-        res.render('passwordManagment/View-All-Password',{propic:proimge,getpassdl:getpass,logMob:loginUser,success:'Data Update Successfully'})
+        res.render('passwordManagment/View-All-Password',{propic:proimage,getpassdl:getpass,logMob:loginUser,success:'Data Update Successfully'})
         
       }
       catch(err){
@@ -345,7 +388,7 @@ router.get('/Add-New-Password',checklogin, async (req,res)=>{
           console.log(err)
       }}
       else{
-        res.render('/login',{success:'Need to login first'})
+        res.redirect('/login')
 
       }   
      })

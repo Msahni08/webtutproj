@@ -1,20 +1,19 @@
     {{>nav}}
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
 
 
 
-<form class="modal-content" action="login" method="POST" >
-    <div class="container">
-      <h1>Sign In</h1>
-       {{#if this.success}}
-  <div class="alert alert-success mt-4">
-  <strong></strong> {{success}}
-  </div>
+  
+<form class="modal-content mt-4" action="login" method="POST" >
+   {{#if this.success}}
+      <div class="alert alert-success mt-4">
+        <strong></strong> {{success}}
+      </div>
   {{/if}}
-      <hr>
+  <h1>Sign In</h1>
     
-
+     <hr>
       <label for="mobile"><b>Mobile</b></label>
       <input type="text" placeholder="Enter Mobile" name="mobile" >
       
@@ -26,5 +25,5 @@
         <button type="submit" class="cancelbtn">Login</button>
         <button  class="signupbtn"><a href="registers"> Don't have account Sign Up</a></button>
       </div>
-    </div>
+    
   </form>

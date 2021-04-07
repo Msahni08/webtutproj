@@ -42,34 +42,64 @@ var upload =multer({
 //         })
 
 router.get('/upload_image', async (req,res,next)=>{
+  var sess=req.session
+  var loginUser=sess.mobile;
+  var proimage= sess.proimg; 
+  if(loginUser){
     try{
-        const getImg= await uplImg.find().lean();
-        console.log(getImg)
-        res.render('upload_image', { title: 'upload image',dspImg:getImg,success:'' });
-        
-    }
-    catch(e){
-        res.status(400).send(e);
-    }
+      const getImg= await uplImg.find().lean();
+      console.log(getImg)
+      res.render('upload_image', { propic:proimage,logMob:loginUser,title: 'upload image',dspImg:getImg,success:'' });
       
-    });
+    }
+      catch(e){
+          res.status(400).send(e);
+      }
+    }else{
+      res.redirect('/login')
+    }
+    
+      
+});
 
 
 router.get('/upload', (req,res)=>{
-    res.render('upload_image',{title:'image upload',success:''})
+  var sess=req.session
+  var loginUser=sess.mobile;
+  var proimage= sess.proimg; 
+  if(loginUser){
+    res.render('upload_image',{propic:proimage,logMob:loginUser,title:'image upload',success:''})
+  }else{
+    res.redirect('/login')
+  }
+    
 })
 
 router.post('/upload',upload,async (req,res,next)=>{
-    imgFile=req.file.filename;
-    var filuplod=req.file.filename+" uploaded successfully"
-    var imgdetails=new uplImg({
-        file:imgFile
-    })
-    const createUser =await imgdetails.save();
-    // console.log("create user"+ createUser);
-    const getImg= await uplImg.find().lean();
-    console.log(getImg)
-    res.render('upload_image', { title: 'dispimg',dspImg:getImg,success:filuplod });
+  var sess=req.session
+  var loginUser=sess.mobile;
+  var proimage= sess.proimg; 
+  if(loginUser){
+    try{
+      imgFile=req.file.filename;
+      var filuplod=req.file.filename+" uploaded successfully"
+      var imgdetails=new uplImg({
+          file:imgFile
+      })
+      const createUser =await imgdetails.save();
+      // console.log("create user"+ createUser);
+      const getImg= await uplImg.find().lean();
+      console.log(getImg)
+      res.render('upload_image', { propic:proimage,logMob:loginUser,title: 'dispimg',dspImg:getImg,success:filuplod });
+    }catch(err){
+      res.status(400).send(err)
+    }
+    
+  }else{
+    res.redirect('/login')
+
+  }
+    
     })
 // Get Home page
     router.get('/home',(req,res)=>{
@@ -78,42 +108,53 @@ router.post('/upload',upload,async (req,res,next)=>{
 
     //middleware for check login
     function checklogin(req,res,next){
-      var myToken =localStorage.getItem('userToken')
-        try {
-            var decoded = jwt.verify(myToken, 'LoginToken');
+  
+      // var myToken =localStorage.getItem('userToken')
+          try {
+            var sess=req.session
+            var myToken =localStorage.getItem('userToken')
+            if(sess.mobile){
+              
+              var decoded = jwt.verify(myToken, 'LoginToken');
+            }else{
+              res.redirect('/login')
+            }
+              // var decoded = jwt.verify(myToken, 'LoginToken');
           } catch(err) {
-            res.redirect('login')
-          }
-          next();
-    }
+              res.status(404).send(err)
+            }
+            next();
+      }
  
  
 
-  router.get('/login2',async(req,res)=>{
-    var myToken =localStorage.getItem('userToken')
-    const empData= await empModel.find().lean();
-    if(myToken){
-    res.render('dashboard')
-    }
-    else{
-      res.render('login')
-    }
-  }) 
+  // router.get('/login2',async(req,res)=>{
+  //   var myToken =localStorage.getItem('userToken')
+  //   const empData= await empModel.find().lean();
+  //   if(myToken){
+  //   res.render('dashboard')
+  //   }
+  //   else{
+  //     res.render('login')
+  //   }
+  // }) 
 
  
-router.get('/logout2',(req,res)=>{
-  localStorage.removeItem('userToken');
-  localStorage.removeItem('userlogin')
+// router.get('/logout2',(req,res)=>{
+//   localStorage.removeItem('userToken');
+//   localStorage.removeItem('userlogin')
 
-  res.render('dashboard');
-}) 
+//   res.render('dashboard');
+// }) 
 
  router.get('/mypage',checklogin,(req,res)=>{
-   loginUser=localStorage.getItem('userlogin')
+  //  loginUser=localStorage.getItem('userlogin')
    loginIdToken=localStorage.getItem('userToken')
-
+   var sess=req.session
+   var loginUser=sess.mobile;
+   var proimage= sess.proimg; 
    if(loginUser){
-   res.render('myPage',{logMob:loginUser,logID:loginIdToken});
+   res.render('myPage',{propic:proimage,logMob:loginUser,logID:loginIdToken});
    }
    else{
      res.redirect('login')

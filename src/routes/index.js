@@ -33,12 +33,23 @@ var upload =multer({
 
 router.get('/' ,async (req,res)=>{
     try{
-        loginUser=localStorage.getItem('userlogin')
-        proimge=localStorage.getItem('proimg')
-    const empData= await empModel.find().lean();
-        proimg=empData.profileImg
-    res.render('', {propic:proimge, title: 'this is hbs template engine',emprecd:empData ,logMob:loginUser,profimg:proimg});
-    }
+       var sess=req.session
+        if(sess.mobile){
+           var loginUser=sess.mobile;
+           var proimage= sess.proimg;
+            // console.log('Mobile no '+loginUser)
+
+            // console.log('profile Image'+proimage)
+
+            // proimge=localStorage.getItem('proimg')
+        const empData= await empModel.find().lean();
+            // proimg=empData.profileImg
+        res.render('', {propic:proimage, title: 'this is hbs template engine',emprecd:empData ,logMob:loginUser});
+    
+        }else{
+            res.render('login')
+        }
+            }
     catch(err){
         res.status(404).send(err)
     }
@@ -46,23 +57,27 @@ router.get('/' ,async (req,res)=>{
 
 
 router.get('/registers',(req,res)=>{
-    loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
-     loginIdToken=localStorage.getItem('userToken')
-      if(loginIdToken){
+    // loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    //  loginIdToken=localStorage.getItem('userToken')
+    var sess=req.session
+    if(sess.mobile){
         res.redirect('/');
-      }else{
+    }else{
         res.render('registers')
-      }
+    }
+    
+      
   })
 
   router.get('/login',async(req,res)=>{
-    var myToken =localStorage.getItem('userToken')
-    loginUser=localStorage.getItem('userlogin')
-    proimge=localStorage.getItem('proimg')
 
-    if(loginUser){
-    const empData= await empModel.find().lean();
+    // var myToken =localStorage.getItem('userToken')
+    // loginUser=localStorage.getItem('userlogin')
+    // proimge=localStorage.getItem('proimg')
+    var sess=req.session
+    if(sess.mobile){
+    // const empData= await empModel.find().lean();
     res.redirect('/')
     }
     else{
@@ -87,6 +102,7 @@ router.get('/registers',(req,res)=>{
     try{
       var Mobi =req.body.mobile;
       var Pass= req.body.password;
+      var sess=req.session;
      var empmob= await empModel.findOne({mobile:Mobi});
      var empmo=empmob.password;
      var profimg=empmob.profileImg
@@ -98,15 +114,17 @@ router.get('/registers',(req,res)=>{
         var getuserId=empmo._id
         var token = jwt.sign({userid: getuserId }, 'LoginToken');
         localStorage.setItem('userToken', token);
-        localStorage.setItem('userlogin', Mobi);
-        localStorage.setItem('proimg', profimg);
+        // localStorage.setItem('userlogin', Mobi);
+        // localStorage.setItem('proimg', profimg);
 
-
-       loginUser=localStorage.getItem('userlogin')
-       proimge=localStorage.getItem('proimg')
-        console.log("Profile img "+proimge)
-        const empData= await empModel.find().lean();
-        res.status(201).render('home', { propic:proimge,logMob:loginUser,emprecd:empData});
+        sess.mobile=Mobi
+        sess.proimg=profimg
+        res.redirect('/')
+    //    loginUser=req.session.mobile;
+    //    proimge=localStorage.getItem('proimg')
+    //     console.log("Profile img "+proimge)
+    //     const empData= await empModel.find().lean();
+    //     res.status(201).render('home', { propic:proimge,logMob:req.session.mobile,emprecd:empData});
       }
       else{
         res.status(404).render("login",{success:'Invalid Mobile Number or password'});
@@ -167,21 +185,36 @@ router.post('/search', async (req,res)=>{
 })
 
 router.get('/logout',(req,res)=>{
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userlogin')
-    localStorage.removeItem('proimg')
+
+    req.session.destroy(function(err) {
+        if(err){
+            res.status(404).send(err)
+        }else{
+            res.redirect('login');
+        }
+        
+      })
+    // localStorage.removeItem('userToken');
+    // localStorage.removeItem('userlogin')
+    // localStorage.removeItem('proimg')
 
 
-    res.redirect('/');
+    
 }) 
 
 router.get('/delete/:_id', async (req,res,next)=>{
     try{
-    var id= req.params._id;   
-        var del= await empModel.findByIdAndDelete(id).lean();
-        const empData= await empModel.find().lean();
-        // res.redirect('/', { title: 'deleted',emprecd:empData,success:'Records Deleted successfully' });
-         res.redirect('/');
+        var sess=req.session
+        if(sess.mobile){
+            var id= req.params._id;   
+            var del= await empModel.findByIdAndDelete(id).lean();
+            const empData= await empModel.find().lean();
+            // res.redirect('/', { title: 'deleted',emprecd:empData,success:'Records Deleted successfully' });
+             res.redirect('/');
+        }else{
+            res.redirect('login')
+        }
+    
     }
     catch(e){
         res.status(40).send(e);
@@ -189,17 +222,37 @@ router.get('/delete/:_id', async (req,res,next)=>{
     })
    
     router.get('/edit/:_id', async (req,res,next)=>{
-    proimge=localStorage.getItem('proimg')
 
-        var id= req.params._id;   
-            var edt= await empModel.findById(id).lean();
-            res.render('edit', {propic:proimge, title: 'Edit page',emprecd:edt });
-          
-
-        })
+        try{
+            var sess =req.session;
+            if(sess.mobile){
+                var loginUser=sess.mobile;
+                var proimage= sess.proimg;
+            
+            
+                    var id= req.params._id;   
+                        var edt= await empModel.findById(id).lean();
+                        res.render('edit', {propic:proimage, title: 'Edit page',emprecd:edt });
+                      
+            }else{
+                res.redirect('login')
+            }
+            
+        
+                
+        }
+        catch(err){
+            res.status(404).send(err)
+        }
+    })
+    // proimge=localStorage.getItem('proimg')
+    
     router.post('/update',upload, async (req,res,next)=>{   
-    proimge=localStorage.getItem('proimg')
-
+       try{
+            var sess =req.session
+        if(sess.mobile){
+            var loginUser=sess.mobile;
+            var proimage= sess.proimg;
             if(req.file){
                 var edt= await empModel.findByIdAndUpdate(req.body.id,{
                     name:req.body.name,
@@ -211,29 +264,38 @@ router.get('/delete/:_id', async (req,res,next)=>{
                     profileImg:req.file.filename,
                     password:req.body.password,
                     cpassword:req.body.cpassword,
-            }).lean();
-            const empData= await empModel.find().lean();
-            // res.render('index', { title: 'Update page',emprecd:empData,success:'Records updated successfully' });
-            res.redirect('/')
-            next();
-                 }
-            else{
-                var edt= await empModel.findByIdAndUpdate(req.body.id,{
-                    name:req.body.name,
-                    mobile:req.body.mobile,
-                    email:req.body.email,
-                    address:req.body.address,
-                    age:req.body.age,
-                    gender:req.body.gender,
-                    password:req.body.password,
-                    cpassword:req.body.cpassword,
-                    
                 }).lean();
                 const empData= await empModel.find().lean();
-                // res.render('index', { title: 'Update page',emprecd:empData,success:'Records updated successfully' });
-                res.redirect('/')
-                next();
-            }
+                res.render('', { propic:proimage,logMob:loginUser,title: 'Update page',emprecd:empData,success:'File updated successfully' });
+                // res.redirect('/')
+                // next();
+                    }
+                else{
+                    var edt= await empModel.findByIdAndUpdate(req.body.id,{
+                        name:req.body.name,
+                        mobile:req.body.mobile,
+                        email:req.body.email,
+                        address:req.body.address,
+                        age:req.body.age,
+                        gender:req.body.gender,
+                        password:req.body.password,
+                        cpassword:req.body.cpassword,
+                        
+                    }).lean();
+                    const empData= await empModel.find().lean();
+                    res.render('', { propic:proimage,logMob:loginUser,title: 'Update page',emprecd:empData,success:'Records updated successfully' });
+
+                    // res.redirect('/')
+                    // next();
+                }
+            }else{
+                    res.redirect('login')
+                }
+        }   
+       catch(err){
+           res.status(404).send(err)
+       }
+       
         })
   //middleware for check mobile
    function checkMobile(req,res,next){
