@@ -16,7 +16,8 @@
 {{>joints}}
   
 <body>
-       <h3 style="text-align: right;margin-right:20px;color:red">Logged as:{{logMob}}</h3> 
+            <h3 style="text-align: right;margin-right:20px;color:red"><img src="/profileImg/{{propic}} " alt="img" style="width: 50px; height:50px;border-radius: 3rem;">Logged as:{{logMob}}</h3> 
+
   {{#if this.success}}
   <div class="alert alert-success mt-4">
   <strong>Success!</strong> {{success}}
@@ -27,27 +28,27 @@
         <form action="/joints/post_bootstap_data" method="POST"  >
            <div class="mb-3 ">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="Name" placeholder="Enter Your Name" name="Name" required>
+                <input type="text"  id="Name" placeholder="Enter Your Name" name="Name" required>
            </div>
             <div class="mb-4 ">
                 <label for="Position" class="form-label">Position</label>
-                <input type="text" class="form-control" name="Position" >
+                <input type="text"  id="Position" name="Position" required>
            </div>
             <div class="mb-4 ">
                 <label for="Office" class="form-label">Office</label>
-                <input type="text" class="form-control" id="Office" name="Office">
+                <input type="text"  id="Office" name="Office" required>
            </div>
               <div class="mb-4 ">
                 <label for="address" class="form-label">StartDate</label>
-                <input type="text" class="form-control" name="StartDate">
+                <input type="text"  name="StartDate" required>
            </div>
             <div class="mb-4">
                 <label for="age" class="form-label">Age</label>
-                <input type="age" class="form-control" id="age"  name="Age">
+                <input type="text"  id="age"  name="Age" required>
              </div>
              <div class="mb-4">
-                <label for="age" class="form-label">Salary</label>
-                <input type="age" class="form-control" id="age"  name="Salary">
+                <label for="Salary" class="form-label">Salary</label>
+                <input type="text"  id="Salary"  name="Salary" required>
              </div>
              <button class="btn btn-primary justify-content-center" type="submit">Submit</button>
              

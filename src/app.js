@@ -6,7 +6,7 @@ const port=process.env.PORT || 3000
 const path = require('path');
 app.use(express.static('./public'))
 const path1=path.join(__dirname, 'views');
-
+var session = require('express-session')
 
 const hbs=require('hbs')
 const { registerPartials }=require('hbs')
@@ -29,7 +29,12 @@ app.use('/css',express.static(path.join(__dirname,"public/stylesheet")))
 app.use('/upld',express.static(path.join(__dirname,"public/uploads")))
 app.use('/profileImg',express.static(path.join(__dirname,"public/uploads/profile_image")))
 app.use('/DataTable',express.static(path.join(__dirname,"public/jquery_file_bootstap_search")))
-
+app.use(session({
+    secret:'YG*r%4YX`p5Tg_2U',
+    resave:'false',
+    saveUninitialized:true,
+    // cookie: { secure: true }
+}))
 
 
 
