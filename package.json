@@ -18,6 +18,7 @@
     "ckeditor4": "^4.16.0",
     "ckeditor5": "^26.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
     "font-awesome": "^4.7.0",
     "handlebars": "^4.7.7",

@@ -15,6 +15,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const joinRouter = require('./routes/joints');
 const passmanage = require('./routes/passmanagement');
+var session = require('express-session')
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -29,7 +30,13 @@ app.use('/css',express.static(path.join(__dirname,"public/stylesheet")))
 app.use('/upld',express.static(path.join(__dirname,"public/uploads")))
 app.use('/profileImg',express.static(path.join(__dirname,"public/uploads/profile_image")))
 app.use('/DataTable',express.static(path.join(__dirname,"public/jquery_file_bootstap_search")))
-
+app.use(session({
+    secret: '<7_DZMC99C[easxH',
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { secure: true }
+    // expires: new Date(Date.now() + (30 * 86400 * 1000))
+  }))
 
 
 
