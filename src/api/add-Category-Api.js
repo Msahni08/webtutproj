@@ -13,7 +13,10 @@ router.get('/',(req,res)=>{
 router.get('/getCategory', async (req,res)=>{
     try{
         var getpass= await passcatgr.find({},{'passcatb':1,'_id':0})
-        res.send(getpass)
+        res.status(201).json({
+            massage:"Get Category Data",
+            results:getpass
+        })
         console.log(getpass)
     }
     catch(err){
@@ -29,7 +32,10 @@ router.post('/sendCategory',async (req,res)=>{
             passcatb:sndcategory
         })
         const passcatgry= await passdetails.save();
-        res.send('data send successfully')
+        res.status(201).json({
+            massage:"Category send successfully",
+            results:passcatgry
+        })
  }
  catch(err){
         res.send(err);
@@ -40,16 +46,19 @@ router.put('/updateCategory/:_id',async (req,res)=>{
     try{
         var updateId=req.params._id;
         var category=req.body.passcat
-
+        
         categoryData= await passcatgr.findById(updateId)
         categoryData.passcatb=category?category:categoryData.passcatb;
         categoryData.save();
-        res.send('Update category successfull '+categoryData.passcatb)
+        res.status(201).json({
+            massage:"Update Category Successfully",
+            results:categoryData
+        })
     }
     catch(err){
         res.send(err)
     }
-
+    
 
 })
 // Note- Difference between Put and patch method is that if we want update only one data even then we have to pass all column data either is will be 1 or 2 or more data
@@ -58,18 +67,21 @@ router.patch('/updateCategory/:_id',async (req,res)=>{
     try{
         var updateId=req.params._id;
         // var updateId=req.body._id;  // if request will be received by body
-
+        
         var category=req.body.passcat
-
+        
         categoryData= await passcatgr.findById(updateId)
         categoryData.passcatb=category?category:categoryData.passcatb;
         categoryData.save();
-        res.send('Update category successfull '+categoryData.passcatb)
+        res.status(201).json({
+            massage:"Update Category Successfully",
+            results:categoryData
+        })
     }
     catch(err){
         res.send(err)
     }
-
+    
 
 })
 
@@ -77,19 +89,24 @@ router.delete('/updateCategory/:_id',async (req,res)=>{
     try{
         var updateId=req.params._id;
         // var updateId=req.body._id;  // if request will be received by body
-
+        
         var category=req.body.passcat
-
+        
         categoryData= await passcatgr.findByIdAndRemove(updateId)
         // categoryData.passcatb=category?category:categoryData.passcatb;
         categoryData.save();
-        res.send('Deleted category successfull '+categoryData.passcatb)
+        res.status(201).json({
+            massage:"Delete Category Successfully",
+            results:categoryData
+        })
     }
     catch(err){
         res.send(err)
     }
-
+    
 
 })
+
+
 
 module.exports=router
