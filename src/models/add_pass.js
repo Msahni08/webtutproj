@@ -3,8 +3,9 @@ const validator =require('validator')
 
 
 const PassAdd=mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     addPassword :{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,ref:'Password_category',
         required:true
         },
 

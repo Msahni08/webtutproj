@@ -3,7 +3,6 @@ var router = express.Router();
 const hbs=require('hbs');
 const { data } = require('jquery');
 var empModel=require('../models/employee');
-var bcrypt=require('bcryptjs')
 var jwt = require('jsonwebtoken')
 var bcrypt=require('bcryptjs')
 var multer  = require('multer')

@@ -19,7 +19,8 @@ const apirout =require('./api/add-Category-Api');
 var session = require('express-session');
 
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()) // for parsing application/json
 
 app.use('/bootstrap',express.static(path.join(__dirname,"../node_modules/bootstrap/dist/")))
 app.use('/js',express.static(path.join(__dirname,"../node_modules/bootstrap/dist")))
@@ -45,7 +46,12 @@ app.use('/users', usersRouter);
 app.use('/joints', joinRouter);
 app.use('/passmanagement', passmanage);
 app.use('/api',apirout)
-
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+//     next(); // Important
+// })
 
 
 
