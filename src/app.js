@@ -16,6 +16,8 @@ const usersRouter = require('./routes/users');
 const joinRouter = require('./routes/joints');
 const passmanage = require('./routes/passmanagement');
 const apirout =require('./api/add-Category-Api');
+const angularrout =require('./api/angularApi');
+
 var session = require('express-session');
 
 
@@ -45,7 +47,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/joints', joinRouter);
 app.use('/passmanagement', passmanage);
-app.use('/api',apirout)
+app.use('/api',apirout);
+app.use('/anguralApi',angularrout);
+
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
