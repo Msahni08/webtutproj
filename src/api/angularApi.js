@@ -39,7 +39,43 @@ var multer  = require('multer')
         next();
     })
 
-    }        
+    }   
+      //=====================================================================
+// for storage for file upload
+  var Storage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+        cb(null,'./src/public/uploads/profile_image')},
+    filename: (req, file, cb) =>{
+      cb(null, file.fieldname + '_' + Date.now()+path.extname(file.originalname))
+    }
+  })
+var upload =multer({
+    storage:Storage
+}).single('profileImg');
+
+//----------------------------------------------------------------------
+router.get('/userdetails' ,async (req,res)=>{
+    try{
+          
+            // console.log('Mobile no '+loginUser)
+
+            // console.log('profile Image'+proimage)
+
+            // proimge=localStorage.getItem('proimg')
+        const userdtls= await angModel.find().lean();
+            // proimg=empData.profileImg
+        // res.send(userdtls)
+            res.status(201).json({
+                massage:"Get angular user data",
+                results:userdtls
+            })
+            }
+    catch(err){
+        res.status(404).send(err)
+    }
+})
+
+//=======================================================================     
 //registration Form post
     router.post('/angular_registration',async (req,res)=>{
         try{
@@ -56,6 +92,7 @@ var multer  = require('multer')
                 address:req.body.address,
                 age: req.body.age,
                 gender:req.body.gender,
+                // profileImg:req.file.filename,
                 password:bcyppass,
                 cpassword:bcypcpass ,
                 
@@ -63,12 +100,14 @@ var multer  = require('multer')
             );
             console.log("data sent to database "+angdata)
             const createang =await angdata.save();
-            console.log(createang)
-            res.send('records insterted succefully')
+            res.status(201).json({
+                massage:"Records send successfully",
+                results:createang
+            })   
     
             }
             else{
-                return res.send('password and confirm password doesnt match');
+                 res.send('password and confirm password doesnt match');
     
             }
         }

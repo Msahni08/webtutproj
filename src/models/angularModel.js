@@ -9,6 +9,7 @@ const angurlarschema=mongoose.Schema({
     address:{type:String,required:true},
     age:{type:Number,required:true},
     gender:{type:String},
+    // profileImg: {type: String, required: true },
     password:{type:String,required:true},
     cpassword:{type:String,required:true},  
     

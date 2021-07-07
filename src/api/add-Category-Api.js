@@ -49,12 +49,12 @@ router.post('/sendCategory',async (req,res)=>{
             passcatb:sndcategory
         })
         const passcatgry= await passdetails.save();
-        res.send(passcatgry)
+        // res.send(passcatgry)
 
-        // res.status(201).json({
-        //     massage:"Category send successfully",
-        //     results:passcatgry
-        // })
+        res.status(201).json({
+            massage:"Category send successfully",
+            results:passcatgry
+        })
  }
  catch(err){
         res.send(err);
