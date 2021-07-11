@@ -116,5 +116,48 @@ router.get('/userdetails' ,async (req,res)=>{
         }
         
     })
+//---------------------------------------------------------------------
 
+router.get('/getusrdataBy_id/:_id',async (req,res)=>{
+    try{
+        var getdetail_Id=req.params._id;
+     console.log("get id: "+getdetail_Id)
+        getData= await angModel.findById(getdetail_Id).lean()
+        // res.send(getData)
+        res.status(201).json({
+            massage:"Get angular user data",
+            results:getData
+        })
+    }
+    catch(err){
+        res.send(err)
+    }
+    
+
+})
+//-------------------------------Delete Method-----------------------------------------
+
+router.delete('/deleteReactiveFormData/:_id',async (req,res)=>{
+    try{
+        var deleteId=req.params._id;
+        // var updateId=req.body._id;  // if request will be received by body
+        
+        // var category=req.body.passcat
+        
+        deleteAndGet= await angModel.findByIdAndRemove(deleteId)
+        // categoryData.passcatb=category?category:categoryData.passcatb;
+        deleteAndGet.save();
+        res.status(201).json({
+            massage:"Delete Reactive Form Data Successfully",
+            results:deleteAndGet
+        })
+    }
+    catch(err){
+        res.send(err)
+    }
+    
+
+})
+
+//--------------------------------------------------------------------------------
     module.exports=router
