@@ -123,10 +123,31 @@ router.get('/getusrdataBy_id/:_id',async (req,res)=>{
         var getdetail_Id=req.params._id;
      console.log("get id: "+getdetail_Id)
         getData= await angModel.findById(getdetail_Id).lean()
-        // res.send(getData)
+        res.send(getData)
+        // res.status(201).json({
+        //     massage:"Get angular user data",
+        //     results:[getData]
+        // })
+    }
+    catch(err){
+        res.send(err)
+    }
+    
+
+})
+//------------------------------------------------------------------------------------
+router.patch('/updateUserData/:_id',async (req,res)=>{
+    try{
+        var updateId=req.params._id;
+        var angdata=req.body
+        console.log("angdata: ",angdata)
+        UpdateData= await angModel.findByIdAndUpdate(updateId,angdata)
+        console.log("UpdateData:",UpdateData)
+        // categoryData.passcatb=category?category:categoryData.passcatb;
+        UpdateData.save();
         res.status(201).json({
-            massage:"Get angular user data",
-            results:getData
+            massage:"Update Reactive Form Data Successfully",
+            results:UpdateData
         })
     }
     catch(err){
